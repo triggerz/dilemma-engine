@@ -7,6 +7,7 @@
     "react-scripts": "1.0.17"
   },
   "dependencies": {
+    "mdconf": "^0.0.2",
     "react": "^16.1.1",
     "react-dom": "^16.1.1"
   },
