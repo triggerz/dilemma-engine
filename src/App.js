@@ -73,8 +73,12 @@ class App extends Component {
     const fd = new FormData();
     fd.append('uuid', uuid);
     fetch(`${this.props.config.responseServer}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       method: 'POST',
-      body: fd
+      body: JSON.stringify({ uuid })
     });
   }
 
