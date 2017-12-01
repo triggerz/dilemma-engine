@@ -43,13 +43,11 @@ class IntroPage extends Component {
 
     const text = md(combinedText, {renderer});
 
-    const style = {};
-
     let backgroundImage;
     if (this.state.scene.config.background) {
       backgroundImage = [
-        <div style={{ position: 'absolute', width: '100%', height: '100%', background: `url(${this.state.scene.config.background})`, backgroundSize: 'cover', zIndex: -100, top: '0', left: '0'}} />,
-        <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'white', opacity: '0.9', zIndex: -50, top: '0', left: '0'}} />
+        <div key='a' style={{ position: 'absolute', width: '100%', height: '100%', background: `url(${this.state.scene.config.background})`, backgroundSize: 'cover', zIndex: -100, top: '0', left: '0'}} />,
+        <div key='b' style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'white', opacity: '0.9', zIndex: -50, top: '0', left: '0'}} />
       ];
     }
 
@@ -69,7 +67,23 @@ class IntroPage extends Component {
 
 
 class App extends Component {
+  onCompleted() {
+    const searchParams = new URLSearchParams(window.location.search);
+    const uuid = searchParams.get('UUID');
+    const fd = new FormData();
+    fd.append('uuid', uuid);
+    fetch(`${this.props.config.responseServer}`, {
+      method: 'POST',
+      body: fd
+    });
+  }
+
   render() {
+    const completedStyle = {
+      margin: 'auto'
+    };
+
+
 
     return (
       <div className="pure-g">
@@ -81,6 +95,7 @@ class App extends Component {
           <IntroPage />
         </div>
         <div className="pure-u-1-5"></div>
+        <button className="pure-button pure-button-primary button-xlarge" style={completedStyle} onClick={this.onCompleted.bind(this)}>Completed</button>
       </div>
     );
   }
