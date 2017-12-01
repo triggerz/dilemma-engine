@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import md from 'marked';
+import Gauge from 'react-svg-gauge';
 import parse from './mdconf';
 
-import md from 'marked';
 
 const renderer = new md.Renderer();
 renderer.image = function(href, title, text) {
@@ -18,7 +19,8 @@ class IntroPage extends Component {
   constructor() {
     super();
     this.state = {
-      loading: true
+      loading: true,
+      value: 75
      };
   }
 
@@ -54,6 +56,9 @@ class IntroPage extends Component {
     return (
       <div>
         {backgroundImage}
+        <Gauge value={33} width={80} height={64} label="Leadership" minMaxLabelStyle={{display: 'none'}} />
+        <Gauge value={75} width={80} height={64} label="Project management" minMaxLabelStyle={{display: 'none'}} />
+        <Gauge value={12} width={80} height={64} label="Friday beers" minMaxLabelStyle={{display: 'none'}} />
         <h2>{title}</h2>
         <div dangerouslySetInnerHTML={{__html: text}} />
         <button className="pure-button pure-button-primary button-xlarge">Get started</button>
