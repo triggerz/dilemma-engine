@@ -25,7 +25,7 @@ class IntroPage extends Component {
   }
 
   componentDidMount() {
-    fetch('scenes/intro/config.md').then(r => r.text()).then(configMarkdown => {
+    fetch('scenes/intro/index.md').then(r => r.text()).then(configMarkdown => {
       this.setState({
         loading: false,
         scene: parse(configMarkdown)
@@ -64,7 +64,6 @@ class IntroPage extends Component {
     )
   }
 }
-
 
 class App extends Component {
   onCompleted() {
