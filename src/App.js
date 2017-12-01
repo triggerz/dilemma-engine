@@ -69,17 +69,30 @@ class IntroPage extends Component {
 class App extends Component {
   onCompleted() {
     const searchParams = new URLSearchParams(window.location.search);
-    const uuid = searchParams.get('UUID');
-    const fd = new FormData();
-    fd.append('uuid', uuid);
-    fetch(`${this.props.config.responseServer}`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({ uuid })
-    });
+    const uuid = searchParams.get('uuid');
+
+    const isEmbedded = !!searchParams.get('embed');
+
+    if (isEmbedded) {
+      const message = JSON.stringify({
+        message: 'dilemma-submit',
+        uuid
+      });
+      window.parent.postMessage(message, '*');
+
+    } else {
+      const fd = new FormData();
+      fd.append('uuid', uuid);
+      fetch(`${this.props.config.responseServer}`, {
+        method: 'POST',
+        body: fd
+//        headers: {
+//          'Accept': 'application/json',
+//          'Content-Type': 'application/json'
+//        },
+//        body: JSON.stringify({ uuid })
+      });
+    }
   }
 
   render() {
