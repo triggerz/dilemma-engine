@@ -23,7 +23,7 @@ class Scene extends Component {
   }
 
   navigate() {
-    const nextSceneId = this.props.config.config.next;
+    let nextSceneId = this.props.config.config.next;
     if (this.props.config.choices) {
       const choice = this.props.config.choices[this.state.selectedChoice];
       const varsToProcess = Object.keys(choice).filter(c => c !== '(title)' && c!== 'next');
@@ -31,6 +31,7 @@ class Scene extends Component {
       varsToProcess.forEach(v => console.log('Processing ', v, ': ', choice[v]));
 
       console.log('Selected choice: ', choice);
+      nextSceneId = choice.next;
 
     }
     this.props.onNavigate(nextSceneId);
