@@ -6,7 +6,6 @@ import parse from './mdconf';
 
 const renderer = new md.Renderer();
 renderer.image = function(href, title, text) {
-
   let out = '<img src="scenes/intro/' + href + '" alt="' + text + '"';
   if (title) {
     out += ' title="' + title + '"';
@@ -16,9 +15,14 @@ renderer.image = function(href, title, text) {
 };
 
 class Scene extends Component {
+  navigate() {
+    const nextSceneId = this.props.config.config.next;
+    this.props.onNavigate(nextSceneId);
+  }
+
   render () {
-    const title = Object.keys(this.props.config)[0];
-    const combinedText = this.props.config[title]['(text)'].join('\n\n');
+    const title = this.props.config.config.title;
+    const combinedText = this.props.config.description['(text)'].join('\n\n');
     const text = md(combinedText, {renderer});
     return (
       <div>
@@ -27,6 +31,7 @@ class Scene extends Component {
         <Gauge value={12} width={80} height={64} label="Friday beers" minMaxLabelStyle={{display: 'none'}} />
         <h2>{title}</h2>
         <div dangerouslySetInnerHTML={{__html: text}} />
+        <button className="pure-button pure-button-primary" onClick={this.navigate.bind(this)}>Next</button>
       </div>
     );
   }
