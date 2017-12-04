@@ -30,6 +30,7 @@ module.exports = function(str, options){
         while (depth-- >= tok.depth) keys.pop();
         keys.push(normalize(tok.text));
         depth = tok.depth;
+        put(conf, keys, tok.text, tok.type);
         break;
       case 'list_item_start':
         inlist = true;
@@ -66,11 +67,19 @@ function put(obj, keys, str, tokenType) {
     keys = keys.concat(['(text)']);
   }
 
+  if (tokenType === 'heading') {
+    keys = keys.concat(['(title)']);
+  }
+
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     last = target;
     target[key] = target[key] || {};
     target = target[key];
+  }
+
+  if (tokenType === 'heading') {
+    last['(title)'] = str;
   }
 
   // code

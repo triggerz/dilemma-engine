@@ -1,47 +1,12 @@
 import React, { Component } from 'react';
-import md from 'marked';
-import Gauge from 'react-svg-gauge';
-import parse from './mdconf';
-
-
-const renderer = new md.Renderer();
-renderer.image = function(href, title, text) {
-  let out = '<img src="scenes/intro/' + href + '" alt="' + text + '"';
-  if (title) {
-    out += ' title="' + title + '"';
-  }
-  out += this.options.xhtml ? '/>' : '>';
-  return out;
-};
-
-class Scene extends Component {
-  navigate() {
-    const nextSceneId = this.props.config.config.next;
-    this.props.onNavigate(nextSceneId);
-  }
-
-  render () {
-    const title = this.props.config.config.title;
-    const combinedText = this.props.config.description['(text)'].join('\n\n');
-    const text = md(combinedText, {renderer});
-    return (
-      <div>
-        <Gauge value={33} width={80} height={64} label="Leadership" minMaxLabelStyle={{display: 'none'}} />
-        <Gauge value={75} width={80} height={64} label="Project management" minMaxLabelStyle={{display: 'none'}} />
-        <Gauge value={12} width={80} height={64} label="Friday beers" minMaxLabelStyle={{display: 'none'}} />
-        <h2>{title}</h2>
-        <div dangerouslySetInnerHTML={{__html: text}} />
-        <button className="pure-button pure-button-primary" onClick={this.navigate.bind(this)}>Next</button>
-      </div>
-    );
-  }
-}
+import Scene from './Scene';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSceneId: props.config.initialScene
+      activeSceneId: props.config.initialScene,
+      variables: props.config.variables
     };
   }
 
@@ -69,7 +34,7 @@ class App extends Component {
 
   render() {
     const activeSceneConfig = this.props.config.scenes[this.state.activeSceneId];
-    const gameState = this.state.gameState;
+    const variables = this.state.variables;
 
     return (
       <div className="pure-g">
@@ -78,7 +43,7 @@ class App extends Component {
           <header>
             <h1>{this.props.config.title}</h1>
           </header>
-          <Scene config={activeSceneConfig} gameState={gameState} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
+          <Scene config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>
         <div className="pure-u-1-5"></div>
       </div>

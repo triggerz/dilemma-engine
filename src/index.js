@@ -16,24 +16,39 @@ async function fetchMarkdownConfig(url) {
   return o;
 }
 
+async function loadScene(sceneId) {
+  console.log('Loading scene ', sceneId);
+  const scene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
+  if (scene.choices) {
+    delete scene.choices['(title)'];
+  }
+
+  let subsequentSceneIds = [];
+  if (scene.config && scene.config.next) {
+    subsequentSceneIds = [scene.config.next];
+  } else if (scene.choices) {
+    subsequentSceneIds = Object.keys(scene.choices).map(c => scene.choices[c].next);
+  } 
+
+  return { scene, subsequentSceneIds };
+}
+
 async function loadScenes() {
-  const {config} = await fetchMarkdownConfig(window.configUrl);
-  
-  const initialScene = await fetchMarkdownConfig(`scenes/${config.initialScene}/index.md`);
-  
+  const {config, variables} = await fetchMarkdownConfig(window.configUrl);
+  delete variables['(title)'];
+  config.variables = variables;
   config.scenes = {};
-  config.scenes[config.initialScene] = initialScene;
   
-  let unprocessedScene = initialScene;
-  while (unprocessedScene) {
-    const nextSceneId = unprocessedScene.config && unprocessedScene.config.next;
-    if (nextSceneId && !config.scenes.hasOwnProperty(nextSceneId)) {
-      const nextScene = await fetchMarkdownConfig(`scenes/${nextSceneId}/index.md`);
-      config.scenes[nextSceneId] = nextScene;
-      unprocessedScene = nextScene;
-    } else {
-      unprocessedScene = null;
-    }
+  let unprocessedSceneIds = [config.initialScene];
+
+  while(unprocessedSceneIds.length > 0) {
+    const sceneId = unprocessedSceneIds[0];
+    const { scene, subsequentSceneIds } = await loadScene(sceneId);
+    config.scenes[sceneId] = scene;
+
+    unprocessedSceneIds = unprocessedSceneIds
+      .concat(subsequentSceneIds)
+      .filter(id => !config.scenes.hasOwnProperty(id));
   }
 
   console.log(config);
