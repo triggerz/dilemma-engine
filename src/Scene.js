@@ -50,14 +50,14 @@ class Scene extends Component {
   render () {
     const title = this.props.config.config.title;
     const combinedText = this.props.config.description['(text)'].join('\n\n');
-    const text = md(combinedText, {renderer});
+    const description = md(combinedText, {renderer});
 
     const varNames = Object.keys(this.props.variables);
     const gauges = varNames.map(varName => {
       const value = this.props.variables[varName];
       return <Gauge key={varName} value={value} width={80} height={64} label={varName} minMaxLabelStyle={{display: 'none'}} />;
     });
-    const gaugePanel = gauges.length ? <panel className="gauges panel">{gauges}</panel> : null;
+    const gaugePanel = gauges.length ? <panel className="gauges panel"><div>{gauges}</div></panel> : null;
 
     const choiceKeys = Object.keys(this.props.config.choices || {});
     const choices = choiceKeys.map(choiceKey => {
@@ -74,8 +74,10 @@ class Scene extends Component {
     return (
       <div className="game">
         <section className="description">
-          <h2>{title}</h2>
-          <div className="panel" dangerouslySetInnerHTML={{__html: text}} />
+          <div className="panel">
+            <h1>{title}</h1>
+            <div dangerouslySetInnerHTML={{__html: description}} />
+          </div>
         </section>
         <section className="sidebar">
           {gaugePanel}
