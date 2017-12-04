@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import md from 'marked';
 import Gauge from 'react-svg-gauge';
-import parse from './mdconf';
+import math from 'mathjs';
 
 const renderer = new md.Renderer();
 renderer.image = function(href, title, text) {
@@ -28,11 +28,19 @@ class Scene extends Component {
       const choice = this.props.config.choices[this.state.selectedChoice];
       const varsToProcess = Object.keys(choice).filter(c => c !== '(title)' && c!== 'next');
 
-      varsToProcess.forEach(v => console.log('Processing ', v, ': ', choice[v]));
+      varsToProcess.forEach(v => {
+        let expression = choice[v];
+        if (expression.match(/^(\+|-)\d*$/)) {
+          // If the expression is simply +3 etc., add it to the previous value.
+          expression = `${v} + ${expression}`;
+        }
 
-      console.log('Selected choice: ', choice);
+        console.log('## ', expression);
+
+        this.props.variables[v] = math.eval(expression, this.props.variables);
+      });
+
       nextSceneId = choice.next;
-
     }
     this.props.onNavigate(nextSceneId);
   }

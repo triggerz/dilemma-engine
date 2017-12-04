@@ -36,6 +36,7 @@ async function loadScene(sceneId) {
 async function loadScenes() {
   const {config, variables} = await fetchMarkdownConfig(window.configUrl);
   delete variables['(title)'];
+  Object.keys(variables).forEach(v => variables[v] = +variables[v]);
   config.variables = variables;
   config.scenes = {};
   
