@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "marked": "^0.3.6",
-    "mdconf": "^0.0.2",
+    "ramda": "^0.25.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-svg-gauge": "^1.0.6"
