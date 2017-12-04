@@ -30,13 +30,9 @@ class Scene extends Component {
 
       varsToProcess.forEach(v => {
         let expression = choice[v];
-        if (expression.match(/^(\+|-)\d*$/)) {
-          // If the expression is simply +3 etc., add it to the previous value.
+        if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
           expression = `${v} + ${expression}`;
         }
-
-        console.log('## ', expression);
-
         this.props.variables[v] = math.eval(expression, this.props.variables);
       });
 
@@ -61,33 +57,31 @@ class Scene extends Component {
       const value = this.props.variables[varName];
       return <Gauge key={varName} value={value} width={80} height={64} label={varName} minMaxLabelStyle={{display: 'none'}} />;
     });
+    const gaugePanel = gauges.length ? <panel className="gauges panel">{gauges}</panel> : null;
 
-    let choices;
-    if (this.props.config.choices) {
-      const choiceKeys = Object.keys(this.props.config.choices);
-      const choiceOptions = choiceKeys.map(choiceKey => {
-        const choice = this.props.config.choices[choiceKey];
-        return (
-          <div key={choiceKey}>
-            <input type="radio" name="choice" id={choiceKey} value={choiceKey} onChange={this.onChoose.bind(this)} />
-            <label htmlFor={choiceKey}>{choice['(title)']}</label>
-          </div>
-        );
-      });
-      choices = (
-        <form action="">
-          {choiceOptions}
-        </form>
+    const choiceKeys = Object.keys(this.props.config.choices || {});
+    const choices = choiceKeys.map(choiceKey => {
+      const choice = this.props.config.choices[choiceKey];
+      return (
+        <div key={choiceKey}>
+          <input type="radio" name="choice" id={choiceKey} value={choiceKey} onChange={this.onChoose.bind(this)} />
+          <label htmlFor={choiceKey}>{choice['(title)']}</label>
+        </div>
       );
-    }
+    });
+    const choicePanel = choices.length ? <form className="choices panel">{choices}</form> : null;
   
     return (
-      <div>
-        {gauges}
-        <h2>{title}</h2>
-        <div dangerouslySetInnerHTML={{__html: text}} />
-        {choices}
-        <button className="pure-button pure-button-primary" onClick={this.navigate.bind(this)}>Next</button>
+      <div className="game">
+        <section className="description">
+          <h2>{title}</h2>
+          <div className="panel" dangerouslySetInnerHTML={{__html: text}} />
+        </section>
+        <section className="sidebar">
+          {gaugePanel}
+          {choicePanel}
+        </section>
+        <button className="next-button pure-button pure-button-primary" onClick={this.navigate.bind(this)}>Next</button>
       </div>
     );
   }
