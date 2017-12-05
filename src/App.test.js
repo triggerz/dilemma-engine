@@ -1,15 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import { shallow } from 'enzyme';
+import App from './App';
+import Scene from './Scene';
 
-it('renders without crashing', () => {
+
+it('renders the initial scene with the proper variables', () => {
+  const initialScene = {};
+  const variables = {};
+
   const config = {
     initialScene: 'initialScene',
-    scenes: {
-      'initialScene': {}
-    }
+    variables,
+    scenes: { initialScene }
   };
-  const variables = {};
-  shallow(<App config={config} variables={variables}/>);
+  const wrapper = shallow(<App config={config} />);
+
+  expect(wrapper.find(Scene)).toHaveLength(1);
+  const scene = wrapper.find(Scene).at(0).props();
+  expect(scene.config).toBe(initialScene);
+  expect(scene.variables).toBe(variables);
 });
