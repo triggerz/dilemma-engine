@@ -16,7 +16,6 @@ renderer.image = function(href, title, text) {
 class Scene extends Component {
   constructor (props) {
     super(props);
-
     this.state = {
       selectedChoice: null
     };
