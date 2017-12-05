@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 import Scene from './Scene';
 import Gauge from 'react-svg-gauge';
 
-
 it('renders the initial scene with the proper variables', () => {
   const sceneConfig = {
     config: {
@@ -40,9 +39,7 @@ it('should adjust variables according to rules when navigating', () => {
       title: 'Some Scene'
     },
     description: {
-      '(text)': [
-        'This scene is for testing'
-      ]
+      '(text)': ['This scene is for testing']
     },
     choices: {
       'first': {

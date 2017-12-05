@@ -1,6 +1,13 @@
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import fetchMock from 'jest-fetch-mock';
+import fs from 'fs';
 
 configure({ adapter: new Adapter() });
-global.fetch = fetchMock;
+
+global.fetch = (url) => {
+  const content = fs.readFileSync(`testdata/${url}`).toString();
+  return Promise.resolve({
+      text: () => { return content; }
+  });
+}
+
