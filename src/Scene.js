@@ -51,6 +51,12 @@ class Scene extends Component {
     const combinedText = this.props.config.description['(text)'].join('\n\n');
     const description = md(combinedText, {renderer});
 
+    const mediaPanel = (
+      <div className="videowrapper">
+        <iframe width="560" height="349" src="https://www.youtube.com/embed/lmyZMtPVodo?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+      </div>
+    );
+
     const varNames = Object.keys(this.props.variables);
     const gauges = varNames.map(varName => {
       const value = this.props.variables[varName];
@@ -75,6 +81,7 @@ class Scene extends Component {
     return (
       <div className="game">
         <section className="description">
+          {mediaPanel}
           <div className="panel">
             <h1>{title}</h1>
             <div dangerouslySetInnerHTML={{__html: description}} />

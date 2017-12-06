@@ -44,3 +44,21 @@ section.sidebar {
   margin: auto;
   width: 320px;
 }
+
+.videowrapper {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+  box-shadow: 2px 2px 9px 0px rgba(0,0,0,0.35);
+  margin-bottom: 20px;
+}
+
+.videowrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+  border-radius: 3px;
+}

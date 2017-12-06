@@ -120,7 +120,10 @@ function put(obj, keys, str, tokenType) {
 function normalize(str) {
   //return str.replace(/\s+/g, ' ').toLowerCase().trim();
   
-  function capitalize(s) { return s[0].toUpperCase() + s.slice(1).toLowerCase(); }
+  function capitalize(s) { 
+    if (!s.length) return '';
+    return s[0].toUpperCase() + s.slice(1).toLowerCase(); 
+  }
   
   const words = str.trim().split(' ');
   return R.reduce((acc, elem) => acc + capitalize(elem), words[0].toLowerCase(), words.slice(1));

@@ -42,6 +42,5 @@ export async function loadScenes(configUrl) {
       .filter(id => !config.scenes.hasOwnProperty(id));
   }
 
-  console.log(config);
   return config;
 }
