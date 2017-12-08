@@ -32,7 +32,7 @@ class Scene extends Component {
         if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
           expression = `${v} + ${expression}`;
         }
-        this.props.variables[v] = math.eval(expression, this.props.variables);
+        this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
       });
 
       nextSceneId = choice.next;
