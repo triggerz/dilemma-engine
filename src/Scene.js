@@ -51,11 +51,12 @@ class Scene extends Component {
     const combinedText = this.props.config.description['(text)'].join('\n\n');
     const description = md(combinedText, {renderer});
 
-    const mediaPanel = (
-      <div className="videowrapper">
-        <iframe width="560" height="349" src="https://www.youtube.com/embed/lmyZMtPVodo?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-      </div>
-    );
+//    const mediaPanel = (
+//      <div className="videowrapper">
+//        <iframe width="560" height="349" src="https://www.youtube.com/embed/lmyZMtPVodo?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+//      </div>
+//    );
+    const mediaPanel = null;
 
     const varNames = Object.keys(this.props.variables);
     const gauges = varNames.map(varName => {
