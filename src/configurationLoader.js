@@ -1,14 +1,34 @@
 import parse from './mdconf';
 
 export async function fetchMarkdownConfig(url) {
-  const markdown = await fetch(url).then(r => r.text());
+  const response = await fetch(url, { cache: 'no-cache' });
+  const markdown = await response.text();
+
+  // When running locally, webpack will just return the bundle if the file is not found.
+  if (markdown.startsWith('<!DOCTYPE html>')) {
+    throw new Error(`${url} not found`);
+  }
   const o = parse(markdown);
   return o;
 }
 
 export async function loadScene(sceneId) {
   console.log('Loading scene ', sceneId);
-  const scene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
+  let scene;
+  try {
+    scene = await fetchMarkdownConfig(`scenes/${sceneId}.md`);
+  } catch (e) { }
+
+  if (!scene) {
+    try {
+      scene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
+    } catch (e) { }
+  }
+    
+  if (!scene) {
+    throw new Error(`Could not find scene file as scenes/${sceneId}.md or scenes/${sceneId}/index.md. Note that scene names are case sensitive.`)
+  }
+
   if (scene.choices) {
     delete scene.choices['(title)'];
   }
