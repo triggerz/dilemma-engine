@@ -91,14 +91,14 @@ function put(obj, keys, str, tokenType) {
 
   if (tokenType === 'text') {
     var i = str.indexOf(':');
-    
+
     // list
     if (-1 == i) {
       if (!Array.isArray(last[key])) last[key] = [];
       last[key].push(str.trim());
       return;
     }
-    
+
     // map
     var key = normalize(str.slice(0, i));
     var val = str.slice(i + 1).trim();
@@ -119,12 +119,12 @@ function put(obj, keys, str, tokenType) {
 
 function normalize(str) {
   //return str.replace(/\s+/g, ' ').toLowerCase().trim();
-  
-  function capitalize(s) { 
+
+  function capitalize(s) {
     if (!s.length) return '';
-    return s[0].toUpperCase() + s.slice(1).toLowerCase(); 
+    return s[0].toUpperCase() + s.slice(1).toLowerCase();
   }
-  
+
   const words = str.trim().split(' ');
   return R.reduce((acc, elem) => acc + capitalize(elem), words[0].toLowerCase(), words.slice(1));
 }

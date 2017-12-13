@@ -37,15 +37,13 @@ class App extends Component {
     const variables = this.state.variables;
 
     return (
-      <div className="pure-g">
-        <div className="pure-u-1-5"></div>
-        <div className="pure-u-3-5">
+      <div className="main-container">
+        <div className="main-container-buffer">
           <header>
             <h1>{this.props.config.title}</h1>
           </header>
           <Scene config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>
-        <div className="pure-u-1-5"></div>
       </div>
     );
   }

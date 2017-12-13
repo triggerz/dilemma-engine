@@ -1,64 +1,187 @@
 body {
-  background-color: #fafafa;
+  font-family: 'Roboto Condensed', sans-serif;
+  color: #707070;
+  fill: #707070;
+  margin: 0;
+  background-color: #efefef;
+}
+
+.main-container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.main-container-buffer {
+  padding: 24px 16px;
+}
+
+.block {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+}
+
+.block > div {
+  margin: 16px;
+  position: relative;
+}
+
+.half-width-block {
+  width: 50%;
+}
+
+.card {
+  margin: 16px 0;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  transition: 200ms;
+  background-color: white;
+  padding: 8px;
+}
+
+p {
+  max-width: 350px;
 }
 
 div.game {
   position: relative;
 }
 
-.game section {
-  width: 49%;
-}
-
-section.description {
-  height: 100%;
-}
-
-section.sidebar {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
 .next-button {
   position: absolute;
-  right: 0;
-  bottom: 0;
-}
-
-.panel {
-  display: block;
-  background-color: white;
-  /* box-shadow: 2px 2px 9px 0px rgba(0,0,0,0.35); */
+  right: 16px;
+  bottom: 16px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
   border-radius: 3px;
-  padding: 10px;
-  margin-bottom: 20px;
+  background-color: #0086b8;
+  color: white;
+  padding: 8px;
+  border: none;
+  text-transform: uppercase;
+  transition: 200ms;
 }
 
-.panel h1 {
+.next-button:hover {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+header h1 {
+  color: #004266;
+  margin: 0 0 0 16px;
+}
+
+.card h1 {
   margin-top: 0;
   font-size: 20px;
+  text-transform: uppercase;
 }
 
-.panel.gauges div {
-  margin: auto;
-  width: 320px;
-}
-
-.videowrapper {
-	position: relative;
-	padding-bottom: 56.25%; /* 16:9 */
-	padding-top: 25px;
-	height: 0;
-  box-shadow: 2px 2px 9px 0px rgba(0,0,0,0.35);
-  margin-bottom: 20px;
-}
-
-.videowrapper iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+.video {
+	padding: 0;
   border-radius: 3px;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.video .container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+
+.video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.image {
+  padding: 0;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.image img {
+  width: 100%;
+  display: block;
+}
+
+.gauge-container {
+  width: 25%;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.sidebar {
+  padding-bottom: 53px;
+}
+
+.gauge-container svg {
+  margin: 0 -10px -16px;
+}
+
+.gauge-container svg path {
+  fill: #00d108;
+}
+
+.gauge-container:nth-child(2) svg path {
+  fill: #0086b8;
+}
+
+.gauge-container:nth-child(3) svg path {
+  fill: #f2da00;
+}
+
+.gauge-container:nth-child(4) svg path {
+  fill: #b820ff;
+}
+
+.gauge-container span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.choices-panel div {
+  padding: 8px;
+  border-radius: 3px;
+  transition: 200ms;
+  cursor: pointer;
+}
+
+.choices-panel div:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #0086b8;
+}
+
+.choices-panel input {
+  display: inline-block;
+  margin: 0 16px 0 0;
+  vertical-align: middle;
+}
+
+.choices-panel label {
+  display: inline-block;
+  width: calc(100% - 40px);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .main-container-buffer {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .block.half-width-block,
+  .block.third-width-block {
+    width: 100%;
+  }
 }
