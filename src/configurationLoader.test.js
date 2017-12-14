@@ -35,6 +35,6 @@ describe('loadScenes', () => {
     const config = await loadScenes('config.md');
 
     const sceneIds = Object.keys(config.scenes);
-    expect(sceneIds).toEqual(['intro', 'brad', 'brad_a', 'brad_b', 'brad_c', 'brad_d']);
+    expect(sceneIds).toEqual(['intro', 'brad']);
   });
 });
