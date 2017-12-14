@@ -1,6 +1,5 @@
 # Config
  - Title: Case intro
- - Media: https://www.youtube.com/watch?v=lmyZMtPVodo
  - Next: brad
 
 # Description
@@ -15,3 +14,4 @@ In the following you will face a series of difficult situations with key colleag
 And your choices have consequences: As in real life, your task is to maximixe *Engagement* and *Performance* in your team, whilst not overspending *Time* and *resources*. You will get instant feedback on every choice. 
 
 Enjoy!
+![logo](simpower.png)
