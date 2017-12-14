@@ -19,8 +19,14 @@ if (!fs.existsSync(outputFolder)) {
 }
 
 const buildFolder = './build/static';
-const files = fs.readdirSync(path.join(buildFolder, 'js'));
-const mainFile = files.find(file => file.startsWith('main') && file.endsWith('.js'));
+const mainFiles = fs.readdirSync(path.join(buildFolder, 'js'));
+const mainFile = mainFiles.find(file => file.startsWith('main') && file.endsWith('.js'));
 const mainFilePath = path.join(buildFolder, 'js', mainFile);
 
+const publicFolder = './public';
+const publicFiles = fs.readdirSync(publicFolder);
+const cssFile = publicFiles.find(file => file.startsWith('index') && file.endsWith('.css'));
+const cssFilePath = path.join(publicFolder, cssFile);
+
 fs.copyFileSync(mainFilePath, path.join(outputFolder, 'main.js'));
+fs.copyFileSync(cssFilePath, path.join(outputFolder, 'index.css'));
