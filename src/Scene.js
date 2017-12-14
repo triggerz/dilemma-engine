@@ -3,16 +3,6 @@ import md from 'marked';
 import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
 
-const renderer = new md.Renderer();
-renderer.image = function(href, title, text) {
-  let out = '<img src="scenes/intro/' + href + '" alt="' + text + '"';
-  if (title) {
-    out += ' title="' + title + '"';
-  }
-  out += this.options.xhtml ? '/>' : '>';
-  return out;
-};
-
 class Scene extends Component {
   constructor (props) {
     super(props);
@@ -23,19 +13,19 @@ class Scene extends Component {
 
   navigate() {
     let nextSceneId = this.props.config.config.next;
-    if (this.props.config.choices) {
+    if (this.props.config.choices.length) {
       const choice = this.props.config.choices[this.state.selectedChoice];
-      const varsToProcess = Object.keys(choice).filter(c => c !== '(title)' && c!== 'next');
+      const varsToProcess = Object.keys(choice.variables);
 
       varsToProcess.forEach(v => {
-        let expression = choice[v];
+        let expression = choice.variables[v];
         if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
           expression = `${v} + ${expression}`;
         }
         this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
       });
 
-      nextSceneId = choice.next;
+      nextSceneId = choice.next || this.props.config.config.next;
     }
     this.props.onNavigate(nextSceneId);
   }
@@ -48,8 +38,8 @@ class Scene extends Component {
 
   render () {
     const title = this.props.config.config.title;
-    const combinedText = this.props.config.description['(text)'].join('\n\n');
-    const description = md(combinedText, {renderer});
+    const combinedText = this.props.config.description;
+    const description = md(combinedText);
     const video = this.props.config.config.video;
     const image = this.props.config.config.image;
     const videoPanel = (
@@ -88,13 +78,12 @@ class Scene extends Component {
     });
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;
 
-    const choiceKeys = Object.keys(this.props.config.choices || {});
-    const choices = choiceKeys.map(choiceKey => {
-      const choice = this.props.config.choices[choiceKey];
+    const choices = this.props.config.choices.map((choice, i) => {
+      const choiceKey = `choice-${i}`;
       return (
         <div key={choiceKey}>
-          <input type="radio" name="choice" id={choiceKey} value={choiceKey} onChange={this.onChoose.bind(this)} />
-          <label htmlFor={choiceKey}>{choice['(title)']}</label>
+          <input type="radio" name="choice" id={choiceKey} value={i} onChange={this.onChoose.bind(this)} />
+          <label htmlFor={choiceKey}>{choice.choice}</label>
         </div>
       );
     });

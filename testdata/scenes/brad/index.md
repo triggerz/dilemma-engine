@@ -30,9 +30,9 @@ Time spent on response: -1
 
 # Choice
 You pick up 3 problematic situations from the past month where Brad’s behaviour have been a problem, and ask him to explain himself
- - time: -1
 
 # Variables
+ - time: -1
  - engagement: -4
  - performance: -3
  - total: round(((engagement * performance) / 100) - (100 - time))

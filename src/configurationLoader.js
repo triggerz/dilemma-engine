@@ -1,4 +1,5 @@
-import parse from './mdconf';
+const R = require('ramda');
+const parse = require('./mdconf');
 
 export async function fetchMarkdownConfig(url) {
   const response = await fetch(url, { cache: 'no-cache' });
@@ -14,31 +15,36 @@ export async function fetchMarkdownConfig(url) {
 
 export async function loadScene(sceneId) {
   console.log('Loading scene ', sceneId);
-  let scene;
+  let rawScene;
   try {
-    scene = await fetchMarkdownConfig(`scenes/${sceneId}.md`);
+    rawScene = await fetchMarkdownConfig(`scenes/${sceneId}.md`);
   } catch (e) { }
 
-  if (!scene) {
+  if (!rawScene) {
     try {
-      scene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
+      rawScene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
     } catch (e) { }
   }
     
-  if (!scene) {
+  if (!rawScene) {
     throw new Error(`Could not find scene file as scenes/${sceneId}.md or scenes/${sceneId}/index.md. Note that scene names are case sensitive.`)
   }
 
-  if (scene.choices) {
-    delete scene.choices['(title)'];
-  }
-
   let subsequentSceneIds = [];
-  if (scene.config && scene.config.next) {
-    subsequentSceneIds = [scene.config.next];
-  } else if (scene.choices) {
-    subsequentSceneIds = Object.keys(scene.choices).map(c => scene.choices[c].next);
+  if (rawScene.config && rawScene.config.next) {
+    subsequentSceneIds = [rawScene.config.next];
+  } else if (rawScene.choices) {
+    subsequentSceneIds = Object.keys(rawScene.choices).map(c => rawScene.choices[c].next);
   } 
+
+  const choiceCount = (rawScene.choice && rawScene.choice.length) || 0;
+  const choices = R.range(0, choiceCount).map(index => ({ choice: rawScene.choice[index], feedback: rawScene.feedback[index], variables: rawScene.variables[index] }));
+
+  const scene = {
+    config: rawScene.config,
+    description: rawScene.description,
+    choices
+  };
 
   return { scene, subsequentSceneIds };
 }
