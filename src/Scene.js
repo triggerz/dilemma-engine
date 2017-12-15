@@ -4,53 +4,61 @@ import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
 var R = require('ramda');
 
-const renderer = new md.Renderer();
-renderer.image = function(href, title, text) {
-  let out = '<img src="scenes/intro/' + href + '" alt="' + text + '"';
-  if (title) {
-    out += ' title="' + title + '"';
-  }
-  out += this.options.xhtml ? '/>' : '>';
-  return out;
-};
-
 class Scene extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      mustChoose: props.config.choices.length > 0,
       selectedChoice: null
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.config != this.props.config) {  // If we're changing scene, reset choice selection
+      this.setState({
+        mustChoose: nextProps.config.choices.length > 0,
+        selectedChoice: null
+      })
+    }
+  }
+
   navigate() {
     let nextSceneId = this.props.config.config.next;
-    if (this.props.config.choices) {
+    if (this.props.config.choices.length) {
       const choice = this.props.config.choices[this.state.selectedChoice];
-      const varsToProcess = Object.keys(choice).filter(c => c !== '(title)' && c!== 'next');
-
-      varsToProcess.forEach(v => {
-        let expression = choice[v];
-        if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
-          expression = `${v} + ${expression}`;
-        }
-        this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
-      });
-
-      nextSceneId = choice.next;
+      nextSceneId = choice.next || this.props.config.config.next;
     }
     this.props.onNavigate(nextSceneId);
   }
 
-  onChoose(changeEvent) {
+  onSelectChoice(changeEvent) {
     this.setState({
       selectedChoice: changeEvent.target.value
     });
   }
 
+  onChoose() {
+    const choice = this.props.config.choices[this.state.selectedChoice];
+    const varsToProcess = Object.keys(choice.variables);
+
+    varsToProcess.forEach(v => {
+      let expression = choice.variables[v];
+      if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
+        expression = `${v} + ${expression}`;
+      }
+      this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
+    });
+
+    this.setState({
+      mustChoose: false
+    })
+
+  }
+
   render () {
     const title = this.props.config.config.title;
-    const combinedText = this.props.config.description['(text)'].join('\n\n');
-    const description = md(combinedText, {renderer});
+    const combinedText = this.props.config.description;
+    const description = md(combinedText);
     const video = this.props.config.config.video;
     const image = this.props.config.config.image;
     const videoPanel = (
@@ -89,17 +97,44 @@ class Scene extends Component {
     });
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;
 
-    const choiceKeys = Object.keys(this.props.config.choices || {});
-    const choices = choiceKeys.map(choiceKey => {
-      const choice = this.props.config.choices[choiceKey];
-      return (
-        <div key={choiceKey}>
-          <input type="radio" name="choice" id={choiceKey} value={choiceKey} onChange={this.onChoose.bind(this)} />
-          <label htmlFor={choiceKey}>{choice['(title)']}</label>
-        </div>
+    let choicePanel;
+    if (this.state.mustChoose) {
+      const choices = this.props.config.choices.map((choice, i) => {
+        const choiceKey = `choice-${i}`;
+        return (
+          <div key={choiceKey}>
+            <input type="radio" name="choice" id={choiceKey} value={i} onChange={this.onSelectChoice.bind(this)} />
+            <label htmlFor={choiceKey}>{choice.choice}</label>
+          </div>
+        );
+      });
+      choicePanel = choices.length ? <form className="choices-panel">{choices}</form> : null;
+    } else {
+      if(this.state.selectedChoice) {
+        const choice = this.props.config.choices[this.state.selectedChoice];
+        const feedback = md(choice.feedback);
+        choicePanel = (
+          <div className='choices-panel'>
+            <div>
+              <input type="radio" name="choice" name="selected-choice" disabled checked />
+              <label htmlFor="selected-choice">{choice.choice}</label>
+              <div id='feedback' dangerouslySetInnerHTML={{ __html: feedback }}></div>
+            </div>
+          </div>
+        );
+      }
+    }
+
+    let navigationButton;
+    if (this.state.mustChoose) {
+      navigationButton = (
+        <button className="next-button" disabled={ !this.state.selectedChoice } onClick={this.onChoose.bind(this)}>Choose</button>
       );
-    });
-    const choicePanel = choices.length ? <form className="choices-panel">{choices}</form> : null;
+    } else {
+      navigationButton = (
+        <button className="next-button" onClick={this.navigate.bind(this)}>Next</button>
+      );
+    }
 
     return (
       <div className="game">
@@ -119,7 +154,7 @@ class Scene extends Component {
             {choicePanel}
           </div>}
         </section>
-        <button className="next-button" onClick={this.navigate.bind(this)}>Next</button>
+        {navigationButton}
       </div>
     );
   }

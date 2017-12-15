@@ -5,7 +5,7 @@ describe('loadScene', () => {
     const { scene, subsequentSceneIds } = await loadScene('basic');
     expect(scene).toHaveProperty('config');
     expect(scene.config.title).toEqual('Basic Scene');
-    expect(scene.description['(text)']).toEqual(['This is a completely basic scene']);
+    expect(scene.description).toEqual('This is a completely basic scene');
     expect(subsequentSceneIds).toEqual([]);
   });
 
@@ -17,16 +17,14 @@ describe('loadScene', () => {
 
   it('loads a scene with choices and reports the correct subsequent scene ids', async () => {
     const { scene, subsequentSceneIds } = await loadScene('brad');
-    const choiceKeys = Object.keys(scene.choices);
-    
-    expect(scene.choices[choiceKeys[0]]).toMatchObject({
-      'time': '-1',
-      'engagement': '-3',
-      'performance': '-2',
-      'total': 'round(((engagement * performance) / 100) - (100 - time))',
-      'next': 'brad_a'
+
+    expect(scene.choices.length).toEqual(4);
+    expect(scene.choices[0]).toMatchObject({
+      choice: 'You tell him exactly how you feel, and try to appeal to him to improve his behavior',
+      variables: {
+        'time': '-1'
+      }
     });
-    expect(subsequentSceneIds).toEqual(['brad_a', 'brad_b', 'brad_c', 'brad_d']);
   });
 });
 
@@ -35,6 +33,6 @@ describe('loadScenes', () => {
     const config = await loadScenes('config.md');
 
     const sceneIds = Object.keys(config.scenes);
-    expect(sceneIds).toEqual(['intro', 'brad', 'brad_a', 'brad_b', 'brad_c', 'brad_d']);
+    expect(sceneIds).toEqual(['intro', 'brad']);
   });
 });

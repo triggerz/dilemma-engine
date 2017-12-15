@@ -3,8 +3,8 @@
  - Initial Scene: intro
 
 # Variables
- - time: 100
+ - Time: 100
  - engagement: 100
  - performance: 100
- - total: 0
+ - Total score: 0
 

@@ -1,6 +1,5 @@
 # Config
  - Title: Case intro
- - Media: https://www.youtube.com/watch?v=lmyZMtPVodo
  - Next: brad
 
 # Description
