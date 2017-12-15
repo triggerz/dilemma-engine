@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import md from 'marked';
 import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
+var R = require('ramda');
 
 const renderer = new md.Renderer();
 renderer.image = function(href, title, text) {
@@ -65,10 +66,12 @@ class Scene extends Component {
      </div>
     );
     const varNames = Object.keys(this.props.variables);
-    const gauges = varNames.map(varName => {
+    var totalVarNameIndex = R.indexOf('total', varNames);
+    var sortedVarNames = totalVarNameIndex ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
+    const gauges = sortedVarNames.map(varName => {
       const value = this.props.variables[varName];
       return (
-        <div className="gauge-container" key={varName}>
+        <div className={"gauge-container " + varName} key={varName}>
           <Gauge
             key={varName}
             value={value}

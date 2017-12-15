@@ -130,6 +130,10 @@ header h1 {
   fill: #00d108;
 }
 
+.gauge-container.total {
+  transform: scale(1.4);
+}
+
 .gauge-container:nth-child(2) svg path:nth-child(3) {
   fill: #0086b8;
 }
