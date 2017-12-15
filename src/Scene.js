@@ -75,6 +75,7 @@ class Scene extends Component {
           <Gauge
             key={varName}
             value={value}
+            max={200}
             width={100}
             height={64}
             label={varName}
