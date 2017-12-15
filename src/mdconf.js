@@ -16,9 +16,10 @@ function parse (str) {
       currentSection = {};
       sections[sectionName].push(currentSection);
     } else if (token.type === 'text') {
-      const [rawKey, value] = token.text.split(':');
+      const rawKey = token.text.substr(0, token.text.indexOf(':'));
       const key = normalize(rawKey);
-      currentSection[key] = value.trim();
+      const value = token.text.substr(token.text.indexOf(':') + 1).trim();
+      currentSection[key] = value;
     } else if (token.type === 'paragraph') {
       if (currentSection.hasOwnProperty('(text)')) {
         currentSection['(text)'] += '\n\n';

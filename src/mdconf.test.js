@@ -41,3 +41,13 @@ That was unfortunate
     ]
   });
 });
+
+it('should only use the first colon as a delimiter', () => {
+  const input = `
+# section
+ - image: http://www.google.com/image.jpg
+`;
+
+  const output = parse(input);
+  expect(output).toEqual({section: {'image': 'http://www.google.com/image.jpg'}});
+})
