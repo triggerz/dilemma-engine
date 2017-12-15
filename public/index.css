@@ -157,10 +157,14 @@ header h1 {
   padding: 8px;
   border-radius: 3px;
   transition: 200ms;
+}
+
+form.choices-panel label,
+form.choices-panel input {
   cursor: pointer;
 }
 
-.choices-panel div:hover {
+form.choices-panel div:hover {
   background-color: rgba(0, 0, 0, 0.1);
   color: #0086b8;
 }
@@ -175,7 +179,6 @@ header h1 {
   display: inline-block;
   width: calc(100% - 40px);
   vertical-align: middle;
-  cursor: pointer;
 }
 
 @media (max-width: 768px) {

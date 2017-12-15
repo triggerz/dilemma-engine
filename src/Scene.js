@@ -75,7 +75,7 @@ class Scene extends Component {
     );
     const varNames = Object.keys(this.props.variables);
     var totalVarNameIndex = R.indexOf('total', varNames);
-    var sortedVarNames = totalVarNameIndex ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
+    var sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
       const value = this.props.variables[varName];
       return (
