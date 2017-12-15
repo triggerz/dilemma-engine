@@ -15,6 +15,7 @@ async function main() {
   const uuid = searchParams.get('uuid');
   const isEmbedded = !!searchParams.get('embed');
   const options = { uuid, isEmbedded };
+  console.log(`## Dilemma engine: Running, embed=${isEmbedded}`)
   ReactDOM.render(<App config={config} options={options} />, document.getElementById('root'));
   registerServiceWorker();
 }

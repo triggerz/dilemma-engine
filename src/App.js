@@ -15,7 +15,9 @@ class App extends Component {
   }
 
   onCompleted() {
+    console.log(`## Dilemma engine: onCompleted`);
     if (this.props.isEmbedded) {
+      console.log(`## Dilemma engine: posting message to parent`);
       const message = JSON.stringify({
         message: 'dilemma-submit',
         uuid: this.props.options.uuid,
@@ -24,6 +26,7 @@ class App extends Component {
       window.parent.postMessage(message, '*');
 
     } else if (this.props.config.responseServer) {
+      console.log(`## Dilemma engine: sending response to ${this.props.config.responseServer}`);
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
       fd.append('variables', JSON.stringify(this.state.variables));
