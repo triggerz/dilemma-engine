@@ -119,11 +119,11 @@ class Scene extends Component {
         choicePanel = (
             <div>
               <h1>Your response</h1>
-              <div dangerouslySetInnerHTML={{ __html: choiceText }} />
+              <div id='choice-text' dangerouslySetInnerHTML={{ __html: choiceText }} />
               <h1>Feedback</h1>
-              <div dangerouslySetInnerHTML={{ __html: feedback }} />
+              <div id='feedback' dangerouslySetInnerHTML={{ __html: feedback }} />
               <h1>Outcome</h1>
-              <div dangerouslySetInnerHTML={{ __html: outcome }} />
+              <div id='outcome' dangerouslySetInnerHTML={{ __html: outcome }} />
             </div>
         );
       }

@@ -41,6 +41,7 @@ it('should adjust variables according to rules when choosing', () => {
       {
         choice: 'first',
         feedback: 'Good job',
+        outcome: 'Everybody is happy',
         variables: {
           a: '+10',
           b: '-10',
