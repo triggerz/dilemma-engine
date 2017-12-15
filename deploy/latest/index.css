@@ -126,7 +126,7 @@ header h1 {
   margin: 0 -10px -16px;
 }
 
-.gauge-container svg path {
+/*.gauge-container svg path {
   fill: #00d108;
 }
 
@@ -140,7 +140,7 @@ header h1 {
 
 .gauge-container:nth-child(4) svg path {
   fill: #b820ff;
-}
+}*/
 
 .gauge-container span {
   display: block;

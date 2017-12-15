@@ -67,8 +67,6 @@ class Scene extends Component {
     const varNames = Object.keys(this.props.variables);
     const gauges = varNames.map(varName => {
       const value = this.props.variables[varName];
-      const g = Math.round(Math.min(100, Math.max(0, +value)) / 100 * 255);
-      const color = `rgb(${255 - g}, ${g}, 0)`;
       return (
         <div className="gauge-container" key={varName}>
           <Gauge
@@ -77,7 +75,6 @@ class Scene extends Component {
             width={100}
             height={64}
             label={varName}
-            color={color}
             minMaxLabelStyle={{display: 'none'}}
             topLabelStyle={{display: 'none'}}
             valueLabelStyle={{color: '#707070', fontSize: '24px'}}
