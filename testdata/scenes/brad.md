@@ -12,10 +12,10 @@ It’s now time for your appraisal dialogue with Brad. What approach shall you c
 You tell him exactly how you feel, and try to appeal to him to improve his behavior
 
 # Variables
- - Time: -1
+ - time: -1
  - engagement: -3
  - performance: -2
- - Total score: round(((engagement * performance) / 100) - (100 - Time))
+ - total: round(((engagement * performance) / 100) - (100 - Time))
 
 # Feedback
 *Feedback:*
