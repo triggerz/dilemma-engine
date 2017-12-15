@@ -3,6 +3,7 @@ import md from 'marked';
 import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
 import * as R from 'ramda';
+import normalizeIfYoutubeLink from './youtube';
 
 class Scene extends Component {
   constructor (props) {
@@ -59,7 +60,7 @@ class Scene extends Component {
     const title = this.props.config.config.title;
     const combinedText = this.props.config.description;
     const description = md(combinedText);
-    const video = this.props.config.config.video;
+    const video = this.props.config.config.video && normalizeIfYoutubeLink(this.props.config.config.video);
     const image = this.props.config.config.image;
     const videoPanel = (
      <div className="card video">
