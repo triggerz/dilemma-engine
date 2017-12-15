@@ -18,13 +18,15 @@ class App extends Component {
     if (this.props.isEmbedded) {
       const message = JSON.stringify({
         message: 'dilemma-submit',
-        uuid: this.props.options.uuid
+        uuid: this.props.options.uuid,
+        variables: this.state.variables
       });
       window.parent.postMessage(message, '*');
 
-    } else {
+    } else if (this.props.config.responseServer) {
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
+      fd.append('variables', JSON.stringify(this.state.variables));
       fetch(`${this.props.config.responseServer}`, {
         method: 'POST',
         body: fd
@@ -35,9 +37,9 @@ class App extends Component {
   render() {
     const activeSceneConfig = this.props.config.scenes[this.state.activeSceneId];
     const variables = this.state.variables;
-    window.onbeforeunload = function() { // see: https://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
-      return true;
-    };
+    if (window.location.hostname !== 'localhost') {
+      window.onbeforeunload = () => true; // see: https://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
+    }
     return (
       <div className="main-container">
         <div className="main-container-buffer">

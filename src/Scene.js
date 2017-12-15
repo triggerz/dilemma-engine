@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import md from 'marked';
 import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
-var R = require('ramda');
+import * as R from 'ramda';
 
 class Scene extends Component {
   constructor (props) {
@@ -14,7 +14,7 @@ class Scene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.config != this.props.config) {  // If we're changing scene, reset choice selection
+    if (nextProps.config !== this.props.config) {  // If we're changing scene, reset choice selection
       this.setState({
         mustChoose: nextProps.config.choices.length > 0,
         selectedChoice: null
@@ -24,11 +24,11 @@ class Scene extends Component {
 
   navigate() {
     let nextSceneId = this.props.config.config.next;
-    if (this.props.config.choices.length) {
-      const choice = this.props.config.choices[this.state.selectedChoice];
-      nextSceneId = choice.next || this.props.config.config.next;
+    if (nextSceneId) {
+      this.props.onNavigate(nextSceneId);
+    } else {
+      this.props.onCompleted();
     }
-    this.props.onNavigate(nextSceneId);
   }
 
   onSelectChoice(changeEvent) {
@@ -70,7 +70,7 @@ class Scene extends Component {
     );
     const imagePanel = (
      <div className="card image">
-       <img src={image}></img>
+       <img src={image} alt=""></img>
      </div>
     );
     const varNames = Object.keys(this.props.variables);
@@ -116,7 +116,7 @@ class Scene extends Component {
         choicePanel = (
           <div className='choices-panel'>
             <div>
-              <input type="radio" name="choice" name="selected-choice" disabled checked />
+              <input type="radio" name="selected-choice" disabled checked />
               <label htmlFor="selected-choice">{choice.choice}</label>
               <div id='feedback' dangerouslySetInnerHTML={{ __html: feedback }}></div>
             </div>
@@ -131,9 +131,15 @@ class Scene extends Component {
         <button className="next-button" disabled={ !this.state.selectedChoice } onClick={this.onChoose.bind(this)}>Choose</button>
       );
     } else {
-      navigationButton = (
-        <button className="next-button" onClick={this.navigate.bind(this)}>Next</button>
-      );
+      if (this.props.config.config.next) {
+        navigationButton = (
+          <button className="next-button" onClick={this.navigate.bind(this)}>Next</button>
+        );
+      } else {
+        navigationButton = (
+          <button className="next-button" onClick={this.navigate.bind(this)}>Complete</button>
+        );
+      }
     }
 
     return (
