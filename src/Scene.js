@@ -101,10 +101,11 @@ class Scene extends Component {
     if (this.state.mustChoose) {
       const choices = this.props.config.choices.map((choice, i) => {
         const choiceKey = `choice-${i}`;
+        const choiceText = md(choice.choice);
         return (
           <div key={choiceKey}>
             <input type="radio" name="choice" id={choiceKey} value={i} onChange={this.onSelectChoice.bind(this)} />
-            <label htmlFor={choiceKey}>{choice.choice}</label>
+            <label htmlFor={choiceKey} dangerouslySetInnerHTML={{ __html: choiceText }} />
           </div>
         );
       });
@@ -112,15 +113,18 @@ class Scene extends Component {
     } else {
       if(this.state.selectedChoice) {
         const choice = this.props.config.choices[this.state.selectedChoice];
+        const choiceText = md(choice.choice);
         const feedback = md(choice.feedback);
+        const outcome = md(choice.outcome);
         choicePanel = (
-          <div className='choices-panel'>
             <div>
-              <input type="radio" name="selected-choice" disabled checked />
-              <label htmlFor="selected-choice">{choice.choice}</label>
-              <div id='feedback' dangerouslySetInnerHTML={{ __html: feedback }}></div>
+              <h1>Your response</h1>
+              <div dangerouslySetInnerHTML={{ __html: choiceText }} />
+              <h1>Feedback</h1>
+              <div dangerouslySetInnerHTML={{ __html: feedback }} />
+              <h1>Outcome</h1>
+              <div dangerouslySetInnerHTML={{ __html: outcome }} />
             </div>
-          </div>
         );
       }
     }

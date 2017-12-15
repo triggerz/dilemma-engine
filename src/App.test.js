@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 import App from './App';
 import Scene from './Scene';
 
-
 it('renders the initial scene with the proper variables', () => {
   const initialScene = {};
   const variables = {};

@@ -154,7 +154,7 @@ header h1 {
 }
 
 .choices-panel div {
-  padding: 8px;
+  /* padding: 8px; */
   border-radius: 3px;
   transition: 200ms;
 }

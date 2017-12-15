@@ -18,12 +18,12 @@ export async function loadScene(sceneId) {
   let rawScene;
   try {
     rawScene = await fetchMarkdownConfig(`scenes/${sceneId}.md`);
-  } catch (e) { }
+  } catch (e) {}
 
   if (!rawScene) {
     try {
       rawScene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
-    } catch (e) { }
+    } catch (e) {}
   }
     
   if (!rawScene) {
@@ -33,12 +33,15 @@ export async function loadScene(sceneId) {
   let subsequentSceneIds = [];
   if (rawScene.config && rawScene.config.next) {
     subsequentSceneIds = [rawScene.config.next];
-  } else if (rawScene.choices) {
-    subsequentSceneIds = Object.keys(rawScene.choices).map(c => rawScene.choices[c].next);
   } 
 
   const choiceCount = (rawScene.choice && rawScene.choice.length) || 0;
-  const choices = R.range(0, choiceCount).map(index => ({ choice: rawScene.choice[index], feedback: rawScene.feedback[index], variables: rawScene.variables[index] }));
+  const choices = R.range(0, choiceCount).map(index => ({
+    choice: rawScene.choice[index],
+    feedback: rawScene.feedback[index],
+    outcome: rawScene.outcome[index],
+    variables: rawScene.variables[index]
+  }));
 
   const scene = {
     config: rawScene.config,
@@ -51,7 +54,6 @@ export async function loadScene(sceneId) {
 
 export async function loadScenes(configUrl) {
   const {config, variables} = await fetchMarkdownConfig(configUrl);
-  delete variables['(title)'];
   Object.keys(variables).forEach(v => variables[v] = +variables[v]);
   config.variables = variables;
   config.scenes = {};
