@@ -30,7 +30,7 @@ it('renders the initial scene with the proper variables', () => {
   expect(gauge3).toMatchObject({ value: 90, label: 'c', color: 'rgb(25, 230, 0)' });
 });
 
-it('should adjust variables according to rules when navigating', () => {
+it('should adjust variables according to rules when choosing', () => {
   const sceneConfig = {
     config: {
       title: 'Some Scene',
@@ -61,5 +61,7 @@ it('should adjust variables according to rules when navigating', () => {
   wrapper.find('input#choice-0').simulate('change', {target: { value: '0' } });
   wrapper.find('button').simulate('click');
   expect(variables).toEqual({ a: 20, b: 40, c: 114 });
-  expect(nextSceneId).toEqual('first');
+
+  const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
+  expect(feedback).toEqual('<p>Good job</p>');
 });
