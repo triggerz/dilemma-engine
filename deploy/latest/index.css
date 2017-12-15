@@ -126,21 +126,25 @@ header h1 {
   margin: 0 -10px -16px;
 }
 
-/*.gauge-container svg path {
+.gauge-container svg path:nth-child(3) {
   fill: #00d108;
 }
 
-.gauge-container:nth-child(2) svg path {
+.gauge-container.total {
+  transform: scale(1.4);
+}
+
+.gauge-container:nth-child(2) svg path:nth-child(3) {
   fill: #0086b8;
 }
 
-.gauge-container:nth-child(3) svg path {
+.gauge-container:nth-child(3) svg path:nth-child(3) {
   fill: #f2da00;
 }
 
-.gauge-container:nth-child(4) svg path {
+.gauge-container:nth-child(4) svg path:nth-child(3) {
   fill: #b820ff;
-}*/
+}
 
 .gauge-container span {
   display: block;
