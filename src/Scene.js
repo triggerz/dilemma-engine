@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import md from 'marked';
 import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
+var R = require('ramda');
 
 class Scene extends Component {
   constructor (props) {
@@ -73,19 +74,19 @@ class Scene extends Component {
      </div>
     );
     const varNames = Object.keys(this.props.variables);
-    const gauges = varNames.map(varName => {
+    var totalVarNameIndex = R.indexOf('total', varNames);
+    var sortedVarNames = totalVarNameIndex ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
+    const gauges = sortedVarNames.map(varName => {
       const value = this.props.variables[varName];
-      const g = Math.round(Math.min(100, Math.max(0, +value)) / 100 * 255);
-      const color = `rgb(${255 - g}, ${g}, 0)`;
       return (
-        <div className="gauge-container" key={varName}>
+        <div className={"gauge-container " + varName} key={varName}>
           <Gauge
             key={varName}
             value={value}
+            max={200}
             width={100}
             height={64}
             label={varName}
-            color={color}
             minMaxLabelStyle={{display: 'none'}}
             topLabelStyle={{display: 'none'}}
             valueLabelStyle={{color: '#707070', fontSize: '24px'}}
