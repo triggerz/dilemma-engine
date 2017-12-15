@@ -44,7 +44,7 @@ class App extends Component {
       <div className="main-container">
         <div className="main-container-buffer">
           <header>
-            <h1>{this.props.config.title}</h1>
+            <h1>{activeSceneConfig.config.title}</h1>
           </header>
           <Scene config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>

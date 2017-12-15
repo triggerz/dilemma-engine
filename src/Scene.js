@@ -153,7 +153,6 @@ class Scene extends Component {
           {video && videoPanel}
           {image && imagePanel}
           <div className="card">
-            <h1>{title}</h1>
             <div dangerouslySetInnerHTML={{__html: description}} />
           </div>
         </section>

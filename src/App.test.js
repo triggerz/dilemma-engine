@@ -5,7 +5,7 @@ import App from './App';
 import Scene from './Scene';
 
 it('renders the initial scene with the proper variables', () => {
-  const initialScene = {};
+  const initialScene = { config: { title: 'initial scene' } };
   const variables = {};
 
   const config = {
@@ -22,8 +22,8 @@ it('renders the initial scene with the proper variables', () => {
 });
 
 it('navigates when the scene requests it', () => {
-  const initialScene = { title: 'Initial Scene' };
-  const scene2 = { title: 'Scene #2'};
+  const initialScene = { config: { title: 'Initial Scene'} };
+  const scene2 = { config: {title: 'Scene #2' } };
   const variables = {};
 
   const config = {

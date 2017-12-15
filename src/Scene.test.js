@@ -19,7 +19,6 @@ it('renders the initial scene with the proper variables', () => {
   };
   const wrapper = shallow(<Scene config={sceneConfig} variables={variables} />);
 
-  expect(wrapper.contains(<h1>Some Scene</h1>)).toEqual(true);
   expect(wrapper.find(Gauge)).toHaveLength(3);
   const gauge1 = wrapper.find(Gauge).at(0).props();
   const gauge2 = wrapper.find(Gauge).at(1).props();
