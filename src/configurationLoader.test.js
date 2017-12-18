@@ -30,7 +30,7 @@ describe('loadScene', () => {
 
 describe('loadScenes', () => {
   it('should load the config file trail of scenes from there', async () => {
-    const config = await loadScenes('config.md');
+    const {config} = await loadScenes('config.md');
 
     const sceneIds = Object.keys(config.scenes);
     expect(sceneIds).toEqual(['intro', 'brad']);

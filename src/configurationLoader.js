@@ -52,23 +52,50 @@ export async function loadScene(sceneId) {
   return { scene, subsequentSceneIds };
 }
 
-export async function loadScenes(configUrl) {
-  const {config, variables} = await fetchMarkdownConfig(configUrl);
-  Object.keys(variables).forEach(v => variables[v] = +variables[v]);
-  config.variables = variables;
-  config.scenes = {};
+async function loadConfig(configUrl, analysis) {
+  let config;
+  try {
+    const rawConfig = await fetchMarkdownConfig(configUrl);
+
+    if (!rawConfig.config) {
+      throw new Error('Configuration file doesn\'t have a #Config section');
+    } else if (Array.isArray(rawConfig.config)) {
+      throw new Error('Configuration file must have exactly one #Config section');
+    }
+
+    config = rawConfig.config;
+    const variables = rawConfig.variables;
+
+    Object.keys(variables).forEach(v => variables[v] = +variables[v]);
+    config.variables = variables;
+    config.scenes = {};
+
+    analysis.info.push({ message: `Variables: ${R.keys(variables).join(', ')}` });
+  } catch(e) {
+    analysis.errors.push(e);
+  }
   
-  let unprocessedSceneIds = [config.initialScene];
+  return config;
+}
 
-  while(unprocessedSceneIds.length > 0) {
-    const sceneId = unprocessedSceneIds[0];
-    const { scene, subsequentSceneIds } = await loadScene(sceneId);
-    config.scenes[sceneId] = scene;
+export async function loadScenes(configUrl) {
+  const analysis = {errors: [], warnings: [], info: []};
+  const config = await loadConfig(configUrl, analysis);
 
-    unprocessedSceneIds = unprocessedSceneIds
+  try {
+    let unprocessedSceneIds = [config.initialScene];
+    while(unprocessedSceneIds.length > 0) {
+      const sceneId = unprocessedSceneIds[0];
+      const { scene, subsequentSceneIds } = await loadScene(sceneId);
+      config.scenes[sceneId] = scene;
+      
+      unprocessedSceneIds = unprocessedSceneIds
       .concat(subsequentSceneIds)
       .filter(id => !config.scenes.hasOwnProperty(id));
+    }
+  } catch(e) {
+    analysis.errors.push(e);
   }
 
-  return config;
+  return {config, analysis};
 }

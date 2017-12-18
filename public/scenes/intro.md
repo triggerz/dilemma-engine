@@ -1,6 +1,7 @@
 # Config
  - Title: Case intro
- - Image: https://flemmingfog.github.io/spike/woman.jpg
+ - Image-unused: https://flemmingfog.github.io/spike/woman.jpg
+ - Video: https://www.youtube.com/watch?v=S8fbHm0yYQI
  - Next: brad
 
 # Description
