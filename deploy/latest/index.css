@@ -61,6 +61,11 @@ div.game {
   transition: 200ms;
 }
 
+.next-button:disabled {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.1);
+}
+
 .next-button:hover {
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
 }
@@ -131,7 +136,7 @@ header h1 {
 }
 
 .gauge-container.total {
-  transform: scale(1.4);
+  transform: scale(1.2);
 }
 
 .gauge-container:nth-child(2) svg path:nth-child(3) {
@@ -171,7 +176,7 @@ form.choices-panel div:hover {
 
 .choices-panel input {
   display: inline-block;
-  margin: 0 16px 0 0;
+  margin: 0 16px 0 8px;
   vertical-align: middle;
 }
 
