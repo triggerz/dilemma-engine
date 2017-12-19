@@ -85,12 +85,12 @@ class Scene extends Component {
             key={varName}
             value={value}
             max={200}
-            width={100}
+            width={90}
             height={64}
             label={varName}
             minMaxLabelStyle={{display: 'none'}}
             topLabelStyle={{display: 'none'}}
-            valueLabelStyle={{color: '#707070', fontSize: '24px'}}
+            valueLabelStyle={{color: '#707070', fontSize: '22px'}}
           />
         <span>{varName}</span>
         </div>
