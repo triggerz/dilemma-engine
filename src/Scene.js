@@ -57,7 +57,6 @@ class Scene extends Component {
   }
 
   render () {
-    const title = this.props.config.config.title;
     const combinedText = this.props.config.description;
     const description = md(combinedText);
     const video = this.props.config.config.video && normalizeIfYoutubeLink(this.props.config.config.video);

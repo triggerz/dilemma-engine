@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as R from 'ramda';
 import Scene from './Scene';
 
 class App extends Component {
@@ -6,7 +7,8 @@ class App extends Component {
     super(props);
     this.state = {
       activeSceneId: props.config.initialScene,
-      variables: props.config.variables
+      variables: props.config.variables,
+      exports: props.config.exports
     };
   }
 
@@ -16,19 +18,24 @@ class App extends Component {
 
   onCompleted() {
     console.log(`## Dilemma engine: onCompleted`);
+    const returnVariables = this.state.exports ? R.pickBy(function (value, key) {
+      return R.keys(this.state.exports).includes(key);
+    }.bind(this), this.state.variables)
+    : this.state.variables;
+    console.log(returnVariables);
     if (this.props.options.isEmbedded) {
       console.log(`## Dilemma engine: posting message to parent`);
       const message = JSON.stringify({
         message: 'dilemma-submit',
         uuid: this.props.options.uuid,
-        variables: this.state.variables
+        variables: returnVariables
       });
       window.parent.postMessage(message, '*');
     } else if (this.props.config.responseServer) {
       console.log(`## Dilemma engine: sending response to ${this.props.config.responseServer}`);
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
-      fd.append('variables', JSON.stringify(this.state.variables));
+      fd.append('variables', JSON.stringify(returnVariables));
       fetch(`${this.props.config.responseServer}`, {
         method: 'POST',
         body: fd

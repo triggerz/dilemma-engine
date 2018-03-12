@@ -1,12 +1,14 @@
 # Config
- - Title: Leadership Challenges
+ - Title: Daily Dilemmas
  - Initial Scene: intro
 
 # Variables
- - Time: 100
- - engagement: 100
- - performance: 100
- - resources: 100
- - output: 100
- - Total: 0
+ - strategic: 100
+ - accountability: 100
+ - ambiguity: 100
+ - total: 100
 
+# Exports
+ - strategic: true
+ - accountability: true
+ - ambiguity: true

@@ -1,5 +1,7 @@
 # Config
  - Title: Who to ask to take an extra shift?
+ - Image: https://flemmingfog.github.io/spike/woman.jpg
+ - Next: outro
 
 # Description
 There is a flu going round, and you just received a message that Joan will not be coming in tomorrow morning. 
@@ -16,10 +18,10 @@ Who will you contact next?
 Lilly? When you her asked the first time, she answered that she had already taken on two extra shifts in the past 3 weeks, so she did not want to take another one! (but you have a sense that you could talk her into it…)
 
 # Variables
- - Resources: -1
- - Engagement: -1
- - Output: +2
- - Total: round(((Engagement * Output) / 100) - (100 - Resources))
+ - strategic: -1
+ - accountability: -1
+ - ambiguity: +2
+ - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
 
 # Feedback
 You probably picked Lilly because you sensed that she would save yes, and that would solve your problem. The problem is that you often end up asking the same few people. And that make your most flexible people feel misused.   
@@ -36,17 +38,17 @@ So - all in all: A good choice - though such situations are never fun. But next 
 
 # Outcome
 
-You experienced a positive effect in output (+2) but it costed some in Lilly's engagement (-1) as you spent some time convincing Lilly to accept (-1 on Resources) 
+You experienced a positive effect in output (+2) but it costed some in Lilly's engagement (-1) as you spent some time convincing Lilly to accept (-1 on strategic) 
 
 
 # Choice
 Jonas? When you him asked the first time, he really wanted to help, but couldn't because he had promised to drive his son to the dentist tomorrowself
 
 # Variables
- - Resources: -1
- - Engagement: -1
- - Output: +2
- - Total: round(((Engagement * Output) / 100) - (100 - Resources))
+ - strategic: -1
+ - accountability: -1
+ - ambiguity: +2
+ - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
 
 # Feedback
 Many would have asked Lilly first, because they sensed that she would save yes, and that would solve your problem. As you know, the problem is that you often end up asking the same few people. And that make your most flexible people feel misused.    
@@ -64,7 +66,7 @@ So - all in all: A good choice - though such situations are never fun.
 
 # Outcome
 
-You experienced a positive effect in output (+2) but it costed some in Jonas's engagement (-1) as you spent some time convincing Jonas to accept (-1 on Resources) 
+You experienced a positive effect in output (+2) but it costed some in Jonas's engagement (-1) as you spent some time convincing Jonas to accept (-1 on strategic) 
 
 
 
@@ -72,10 +74,10 @@ You experienced a positive effect in output (+2) but it costed some in Jonas's e
 No-one? Though it's likely to cost a slightly lower output tomorrow, this is what happens from time to time.
 
 # Variables
- - Resources: +0
- - Engagement: +0
- - Output: -4
- - Total: round(((Engagement * Output) / 100) - (100 - Resources))
+ - strategic: +0
+ - accountability: +0
+ - ambiguity: -4
+ - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
 
 # Feedback
 You gave up too early! That option must be reserved to cases where there are really no more options available. 
@@ -100,10 +102,10 @@ You experienced a negative effect in output (-4). No effect on neither engagemen
 Achmed? When you him asked the first time, he pointed out that its Friday tomorrow, and that he had planned to visit his mosque. 
 
 # Variables
- - Resources: -1
- - Engagement: -2
- - Output: +2
- - Total: round(((Engagement * Output) / 100) - (100 - Resources))
+ - strategic: -1
+ - accountability: -2
+ - ambiguity: +2
+ - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
 
 # Feedback
 Picking Achmed was a poor choice as we must respect that the Friday prayers are important to Muslims. So it demonstrated a poor understanding of his cultural values. 
@@ -121,5 +123,5 @@ But great that you did not give up. That option must be reserved to cases where 
 
 # Outcome
 
-You experienced a positive effect in output (+2) but it costed  in Achmed's engagement (-2) as you spent some time convincing Achmed to accept (-1 on Resources) 
+You experienced a positive effect in output (+2) but it costed  in Achmed's engagement (-2) as you spent some time convincing Achmed to accept (-1 on strategic) 
 

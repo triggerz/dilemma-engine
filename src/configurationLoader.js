@@ -25,7 +25,7 @@ export async function loadScene(sceneId) {
       rawScene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
     } catch (e) {}
   }
-    
+
   if (!rawScene) {
     throw new Error(`Could not find scene file as scenes/${sceneId}.md or scenes/${sceneId}/index.md. Note that scene names are case sensitive.`)
   }
@@ -33,7 +33,7 @@ export async function loadScene(sceneId) {
   let subsequentSceneIds = [];
   if (rawScene.config && rawScene.config.next) {
     subsequentSceneIds = [rawScene.config.next];
-  } 
+  }
 
   const choiceCount = (rawScene.choice && rawScene.choice.length) || 0;
   const choices = R.range(0, choiceCount).map(index => ({
@@ -68,13 +68,14 @@ async function loadConfig(configUrl, analysis) {
 
     Object.keys(variables).forEach(v => variables[v] = +variables[v]);
     config.variables = variables;
+    config.exports = rawConfig.exports;
     config.scenes = {};
 
     analysis.info.push({ message: `Variables: ${R.keys(variables).join(', ')}` });
   } catch(e) {
     analysis.errors.push(e);
   }
-  
+
   return config;
 }
 
@@ -88,7 +89,7 @@ export async function loadScenes(configUrl) {
       const sceneId = unprocessedSceneIds[0];
       const { scene, subsequentSceneIds } = await loadScene(sceneId);
       config.scenes[sceneId] = scene;
-      
+
       unprocessedSceneIds = unprocessedSceneIds
       .concat(subsequentSceneIds)
       .filter(id => !config.scenes.hasOwnProperty(id));

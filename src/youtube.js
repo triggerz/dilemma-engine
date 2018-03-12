@@ -1,7 +1,7 @@
 function getYoutubeId(url) {
   url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
   if (url[2] !== undefined) {
-    const id = url[2].split(/[^0-9a-z_\-]/i);
+    const id = url[2].split(/[^0-9a-z_]/i);
     return id[0];
   }
 }

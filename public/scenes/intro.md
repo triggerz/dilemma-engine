@@ -1,18 +1,15 @@
 # Config
- - Title: Case intro
- - Image-unused: https://flemmingfog.github.io/spike/woman.jpg
- - Video: https://www.youtube.com/watch?v=S8fbHm0yYQI
- - Next: brad
+ - Title: Introduction to DAILY DILEMMAS
+ - Next: shift
+ - Image: https://flemmingfog.github.io/spike/donut.jpg
 
 # Description
-You are a country manager in ISS Voldavia, working with a senior leadership team of 5.
-You took over the team just 6 months ago (coming from another country), and you are aware that though the team members in general performs well individually,
-the team spirit is relatively low – and Engagement Survey data supports this.
+In the following you will face a series of difficult situations. For each situation you must decide what to do based on a list of 3-4 different options. 
 
-You feel it’s now time for you to step up and take more responsibility for the dynamics in your team – but how?
+And your choices have consequences: As in real life, your task is to maximixe *Engagement* and *Output* in your team, whilst not overspending on *Resources*. You will get instant feedback on every choice. 
 
-In the following you will face a series of difficult situations with key colleagues. For each situation you must decide what to do based on a list of 3-4 different options. 
+DAILY DILEMMAS is a collection of realistic dilemmas, created by Associate Managers in Novo Nordisk. Both the dilemmas as well as the evaluation of the different responses represents the best advice possible, based on Novo Nordisk values and behavioural guidelines. 
 
-And your choices have consequences: As in real life, your task is to maximixe *Engagement* and *Performance* in your team, whilst not overspending *Time* and *resources*. You will get instant feedback on every choice. 
+But: As every situation and every person is different the recommandations are not as simple as they seem. You will alsways nede to engage a good bit of common sence when you make the real everyday choices. 
 
-Enjoy!
+Enjoy. 
