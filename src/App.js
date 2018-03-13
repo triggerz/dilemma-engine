@@ -24,7 +24,7 @@ class App extends Component {
       return R.keys(this.state.exports).includes(key);
     }.bind(this), this.state.variables)
     : this.state.variables;
-    const normalizedReturnVariables = R.map(value => value / 200, returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
+    const normalizedReturnVariables = R.map(value => value / (R.path(['values', 'max'], this.state) || 200), returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
     if (this.props.options.isEmbedded) {
       console.log(`## Dilemma engine: posting message to parent`);
       const message = JSON.stringify({

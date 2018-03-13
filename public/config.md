@@ -20,4 +20,4 @@
 - ambiguity: true
 
 # Values
- - max: 100
+ - max: 200
