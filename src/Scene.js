@@ -83,7 +83,7 @@ class Scene extends Component {
           <Gauge
             key={varName}
             value={value}
-            max={200}
+            max={200 /* 200 is also referenced as the max value when we submit results. Should be consolidated at some point*/}
             width={90}
             height={64}
             label={varName}

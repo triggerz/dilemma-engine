@@ -22,20 +22,20 @@ class App extends Component {
       return R.keys(this.state.exports).includes(key);
     }.bind(this), this.state.variables)
     : this.state.variables;
-    console.log(returnVariables);
+    const normalizedReturnVariables = R.map(value => value / 200, returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
     if (this.props.options.isEmbedded) {
       console.log(`## Dilemma engine: posting message to parent`);
       const message = JSON.stringify({
         message: 'dilemma-submit',
         uuid: this.props.options.uuid,
-        variables: returnVariables
+        variables: normalizedReturnVariables
       });
       window.parent.postMessage(message, '*');
     } else if (this.props.config.responseServer) {
       console.log(`## Dilemma engine: sending response to ${this.props.config.responseServer}`);
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
-      fd.append('variables', JSON.stringify(returnVariables));
+      fd.append('variables', JSON.stringify(normalizedReturnVariables));
       fetch(`${this.props.config.responseServer}`, {
         method: 'POST',
         body: fd
