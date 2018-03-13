@@ -73,7 +73,7 @@ class Scene extends Component {
        <img src={image} alt=""></img>
      </div>
     );
-    const varNames = Object.keys(this.props.variables);
+    const varNames = Object.keys(this.props.visible || this.props.variables);
     var totalVarNameIndex = R.indexOf('total', varNames);
     var sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
@@ -83,7 +83,7 @@ class Scene extends Component {
           <Gauge
             key={varName}
             value={value}
-            max={200 /* 200 is also referenced as the max value when we submit results. Should be consolidated at some point*/}
+            max={R.path(['values', 'max'], this.props) || 200 /* 200 is also referenced as the max value when we submit results. Should be consolidated at some point*/}
             width={90}
             height={64}
             label={varName}

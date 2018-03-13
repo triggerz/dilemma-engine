@@ -8,7 +8,9 @@ class App extends Component {
     this.state = {
       activeSceneId: props.config.initialScene,
       variables: props.config.variables,
-      exports: props.config.exports
+      exports: props.config.exports,
+      visible: props.config.visible,
+      values: props.config.values
     };
   }
 
@@ -55,7 +57,7 @@ class App extends Component {
           <header>
             <h1>{activeSceneConfig.config.title}</h1>
           </header>
-          <Scene config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
+          <Scene values={this.state.values} visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>
       </div>
     );

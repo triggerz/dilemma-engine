@@ -69,6 +69,8 @@ async function loadConfig(configUrl, analysis) {
     Object.keys(variables).forEach(v => variables[v] = +variables[v]);
     config.variables = variables;
     config.exports = rawConfig.exports;
+    config.visible = rawConfig.visible;
+    config.values = rawConfig.values;
     config.scenes = {};
 
     analysis.info.push({ message: `Variables: ${R.keys(variables).join(', ')}` });

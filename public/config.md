@@ -12,3 +12,12 @@
  - strategic: true
  - accountability: true
  - ambiguity: true
+
+# Visible
+- total: true
+- strategic: true
+- accountability: true
+- ambiguity: true
+
+# Values
+ - max: 100
