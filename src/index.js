@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'url-search-params-polyfill';
 import App from './App';
 import AnalysisReport from './AnalysisReport';
 import registerServiceWorker from './registerServiceWorker';

@@ -6,7 +6,7 @@ export async function fetchMarkdownConfig(url) {
   const markdown = await response.text();
 
   // When running locally, webpack will just return the bundle if the file is not found.
-  if (markdown.startsWith('<!DOCTYPE html>')) {
+  if (markdown.indexOf('<!DOCTYPE html>') === 0) {
     throw new Error(`${url} not found`);
   }
   const o = parse(markdown);
