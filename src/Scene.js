@@ -113,18 +113,39 @@ class Scene extends Component {
     } else {
       if(this.state.selectedChoice) {
         const choice = this.props.config.choices[this.state.selectedChoice];
-        const choiceText = md(choice.choice);
-        const feedback = md(choice.feedback);
-        const outcome = md(choice.outcome);
+        const sections = [];
+        if (choice.choice) {
+          sections.push({
+            id: 'choice-text',
+            title: 'Your response',
+            innerHtml: md(choice.choice)
+          });
+        }
+
+        if (choice.feedback) {
+          sections.push({
+            id: 'feedback',
+            title: 'Feedback',
+            innerHtml: md(choice.feedback)
+          });
+        }
+
+        if (choice.outcome) {
+          sections.push({
+            id: 'outcome',
+            title: 'Outcome',
+            innerHtml: md(choice.outcome)
+          });
+        }
+
         choicePanel = (
-            <div>
-              <h1>Your response</h1>
-              <div id='choice-text' dangerouslySetInnerHTML={{ __html: choiceText }} />
-              <h1>Feedback</h1>
-              <div id='feedback' dangerouslySetInnerHTML={{ __html: feedback }} />
-              <h1>Outcome</h1>
-              <div id='outcome' dangerouslySetInnerHTML={{ __html: outcome }} />
-            </div>
+          <div>
+            {sections.map(s => (
+              <div key={s.id}>
+                <h1>{s.title}</h1>
+                <div id={s.id} dangerouslySetInnerHTML={{ __html: s.innerHtml }} />
+              </div>))}
+          </div>
         );
       }
     }
