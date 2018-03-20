@@ -6,29 +6,33 @@ export async function fetchMarkdownConfig(url) {
   const markdown = await response.text();
 
   // When running locally, webpack will just return the bundle if the file is not found.
-  if (markdown.indexOf('<!DOCTYPE html>') === 0) {
+  if (markdown.indexOf('<!DOCTYPE HTML>') === 0) {
     throw new Error(`${url} not found`);
   }
   const o = parse(markdown);
   return o;
 }
 
-export async function loadScene(sceneId) {
-  console.log('Loading scene ', sceneId);
-  let rawScene;
-  try {
-    rawScene = await fetchMarkdownConfig(`scenes/${sceneId}.md`);
-  } catch (e) {}
-
-  if (!rawScene) {
+async function fetchMarkdownConfigFromFirstOf(urlList) {
+  for (const url of urlList) {
     try {
-      rawScene = await fetchMarkdownConfig(`scenes/${sceneId}/index.md`);
+      const result = await fetchMarkdownConfig(url);
+      return result;
     } catch (e) {}
   }
 
-  if (!rawScene) {
-    throw new Error(`Could not find scene file as scenes/${sceneId}.md or scenes/${sceneId}/index.md. Note that scene names are case sensitive.`)
-  }
+  throw new Error(`Could not find a file by the name of ${urlList.join(', ')}. Please note that file names are case sensitive.`);
+}
+
+export async function loadScene(sceneId) {
+  console.log('Loading scene ', sceneId);
+
+  const rawScene = await fetchMarkdownConfigFromFirstOf([
+    `scenes/${sceneId}.md`,
+    `scenes/${sceneId}.md.txt`,
+    `scenes/${sceneId}/index.md`,
+    `scenes/${sceneId}/index.md.txt`
+  ]);
 
   let subsequentSceneIds = [];
   if (rawScene.config && rawScene.config.next) {
@@ -55,7 +59,7 @@ export async function loadScene(sceneId) {
 async function loadConfig(configUrl, analysis) {
   let config;
   try {
-    const rawConfig = await fetchMarkdownConfig(configUrl);
+    const rawConfig = await fetchMarkdownConfigFromFirstOf([configUrl, `${configUrl}.txt`]);
 
     if (!rawConfig.config) {
       throw new Error('Configuration file doesn\'t have a #Config section');
@@ -64,9 +68,8 @@ async function loadConfig(configUrl, analysis) {
     }
 
     config = rawConfig.config;
-    const variables = rawConfig.variables;
+    const variables = R.map(Number, rawConfig.variables);
 
-    Object.keys(variables).forEach(v => variables[v] = +variables[v]);
     config.variables = variables;
     config.exports = rawConfig.exports;
     config.visible = rawConfig.visible;

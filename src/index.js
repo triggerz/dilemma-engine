@@ -19,7 +19,7 @@ async function main() {
   
   const {config, analysis} = await loadScenes(window.configUrl);
   if (analyze || analysis.errors.length > 0) {
-    ReactDOM.render(<AnalysisReport analysis={analysis}/>, document.getElementById('root'));
+    ReactDOM.render(<AnalysisReport analysis={analysis} />, document.getElementById('root'));
   } else {
     const options = { uuid, isEmbedded };
     ReactDOM.render(<App config={config} options={options} />, document.getElementById('root'));
