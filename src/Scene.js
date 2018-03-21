@@ -74,7 +74,7 @@ class Scene extends Component {
      </div>
     );
 
-    const varNames = this.props.hasOwnProperty('visible')
+    const varNames = this.props.visible
       ? R.filter(v => (this.props.visible[v] && this.props.visible[v].toLowerCase() === 'true'), R.keys(this.props.variables))
       : R.keys(this.props.variables);
 
