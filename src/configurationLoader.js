@@ -26,7 +26,7 @@ async function fetchMarkdownConfigFromFirstOf(urlList) {
 
 export async function loadScene(configUrl, sceneId) {
   console.log('Loading scene ', sceneId);
-
+  
   const rawScene = await fetchMarkdownConfigFromFirstOf([
     `${configUrl}scenes/${sceneId}.md`,
     `${configUrl}scenes/${sceneId}.md.txt`,

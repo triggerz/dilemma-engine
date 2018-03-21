@@ -11,7 +11,7 @@ async function main() {
   const uuid = searchParams.get('uuid');
   const isEmbedded = !!searchParams.get('embed');
   const analyze = !!searchParams.get('analyze');
-  const configUrl = searchParams.get('configUrl') || '';
+  const configUrl = searchParams.get('configUrl') || window.configUrl || '';
   console.log(`## Dilemma engine: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}`);
   
   const {config, analysis} = await loadScenes(configUrl);
