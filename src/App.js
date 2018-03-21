@@ -25,15 +25,18 @@ class App extends Component {
   }
 
   async onCompleted() {
+    console.log(`## Dilemma engine: onCompleted`);
     window.onbeforeunload = null;
 
-    console.log(`## Dilemma engine: onCompleted`);
-    console.log(this.props);
     const returnVariables = this.state.exports ? R.pickBy(function (value, key) {
       return R.contains(key, R.keys(this.state.exports));
     }.bind(this), this.state.variables)
     : this.state.variables;
+
+    const normalizedReturnVariables = this.props.config.maxValue
+
     const normalizedReturnVariables = R.map(value => value / (R.path(['values', 'max'], this.state) || 200), returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
+
     if (this.props.options.isEmbedded) {
       console.log(`## Dilemma engine: posting message to parent`);
       const message = JSON.stringify({
@@ -56,6 +59,8 @@ class App extends Component {
       } catch (e) {}
         
       window.close();
+    } else {
+      console.log('## Dilemma engine: no complete-action specified. Results are: ', normalizedReturnVariables);
     }
   }
 
