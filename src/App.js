@@ -38,14 +38,14 @@ class App extends Component {
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
       fd.append('variables', JSON.stringify(normalizedReturnVariables));
-      fetch(`${this.props.config.ReponseUrl<tab>}`, {
+      fetch(`${this.props.config.ReponseUrl}`, {
         method: 'POST',
         body: fd
       });
     }
   }
 
-  render() {$
+  render() {
     const activeSceneConfig = this.props.config.scenes[this.state.activeSceneId];
     const variables = this.state.variables;
     if (window.location.hostname !== 'localhost') {
