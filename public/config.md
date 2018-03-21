@@ -15,7 +15,7 @@
 
 # Visible
 - total: true
-- strategic: true
+- strategic: false
 - accountability: true
 - ambiguity: true
 

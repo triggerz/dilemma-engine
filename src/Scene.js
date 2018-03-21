@@ -73,7 +73,11 @@ class Scene extends Component {
        <img src={image} alt=""></img>
      </div>
     );
-    const varNames = Object.keys(this.props.visible || this.props.variables);
+
+    const varNames = this.props.hasOwnProperty('visible')
+      ? R.filter(v => (this.props.visible[v] && this.props.visible[v].toLowerCase() === 'true'), R.keys(this.props.variables))
+      : R.keys(this.props.variables);
+
     var totalVarNameIndex = R.indexOf('total', varNames);
     var sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
@@ -177,9 +181,9 @@ class Scene extends Component {
           </div>
         </section>
         <section className="sidebar block half-width-block">
-          <div className="card">
+          {gaugePanel && <div className="card">
             {gaugePanel}
-          </div>
+          </div>}
           {choicePanel && <div className="card">
             {choicePanel}
           </div>}
