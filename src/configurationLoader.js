@@ -28,10 +28,10 @@ export async function loadScene(configUrl, sceneId) {
   console.log('Loading scene ', sceneId);
 
   const rawScene = await fetchMarkdownConfigFromFirstOf([
-    `${configUrl}/scenes/${sceneId}.md`,
-    `${configUrl}/scenes/${sceneId}.md.txt`,
-    `${configUrl}/scenes/${sceneId}/index.md`,
-    `${configUrl}/scenes/${sceneId}/index.md.txt`
+    `${configUrl}scenes/${sceneId}.md`,
+    `${configUrl}scenes/${sceneId}.md.txt`,
+    `${configUrl}scenes/${sceneId}/index.md`,
+    `${configUrl}scenes/${sceneId}/index.md.txt`
   ]);
 
   let subsequentSceneIds = [];
@@ -59,7 +59,7 @@ export async function loadScene(configUrl, sceneId) {
 async function loadConfig(configUrl, analysis) {
   let config;
   try {
-    const rawConfig = await fetchMarkdownConfigFromFirstOf([`${configUrl}/config.md`, `${configUrl}/config.md.txt`]);
+    const rawConfig = await fetchMarkdownConfigFromFirstOf([`${configUrl}config.md`, `${configUrl}config.md.txt`]);
 
     if (!rawConfig.config) {
       throw new Error('Configuration file doesn\'t have a #Config section');
