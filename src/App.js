@@ -33,19 +33,19 @@ class App extends Component {
         variables: normalizedReturnVariables
       });
       window.parent.postMessage(message, '*');
-    } else if (this.props.config.responseServer) {
-      console.log(`## Dilemma engine: sending response to ${this.props.config.responseServer}`);
+    } else if (this.props.config.ReponseUrl) {
+      console.log(`## Dilemma engine: sending response to ${this.props.config.ReponseUrl}`);
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
       fd.append('variables', JSON.stringify(normalizedReturnVariables));
-      fetch(`${this.props.config.responseServer}`, {
+      fetch(`${this.props.config.ReponseUrl<tab>}`, {
         method: 'POST',
         body: fd
       });
     }
   }
 
-  render() {
+  render() {$
     const activeSceneConfig = this.props.config.scenes[this.state.activeSceneId];
     const variables = this.state.variables;
     if (window.location.hostname !== 'localhost') {
