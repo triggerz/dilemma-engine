@@ -4,10 +4,20 @@ import fs from 'fs';
 
 configure({ adapter: new Adapter() });
 
+// Mock fetch by loading from the file system.
 global.fetch = (url) => {
-  const content = fs.readFileSync(`testdata/${url}`).toString();
+  let content;
+  let ok = true;
+
+  try {
+    content = fs.readFileSync(`testdata/${url}`).toString();
+  } catch (e) {
+    ok = false;
+  }
+
   return Promise.resolve({
-      text: () => { return content; }
+    ok,
+    text: () => { return content; }
   });
 }
 

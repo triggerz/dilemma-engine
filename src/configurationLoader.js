@@ -3,6 +3,9 @@ const parse = require('./mdconf');
 
 export async function fetchMarkdownConfig(url) {
   const response = await fetch(url, { cache: 'no-cache' });
+  if (!response.ok) {
+    throw new Error(`${url} could not be loaded`);
+  }
   const markdown = await response.text();
 
   // When running locally, webpack will just return the bundle if the file is not found.
@@ -26,7 +29,7 @@ async function fetchMarkdownConfigFromFirstOf(urlList) {
 
 export async function loadScene(configUrl, sceneId) {
   console.log('Loading scene ', sceneId);
-  
+
   const rawScene = await fetchMarkdownConfigFromFirstOf([
     `${configUrl}scenes/${sceneId}.md`,
     `${configUrl}scenes/${sceneId}.md.txt`,
