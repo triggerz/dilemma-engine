@@ -68,7 +68,7 @@ async function loadConfig(configUrl, analysis) {
     }
 
     config = rawConfig.config;
-    const variables = R.map(Number, rawConfig.variables);
+    const variables = R.map(v => Number(v || 0), rawConfig.variables);
 
     config.variables = variables;
     config.exports = rawConfig.exports;
