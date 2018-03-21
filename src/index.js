@@ -15,6 +15,11 @@ async function main() {
   console.log(`## Dilemma engine: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}`);
   
   const {config, analysis} = await loadScenes(configUrl);
+
+  if (typeof config.maxValue === 'undefined') {
+    config.maxValue = 1;
+  }
+
   if (analyze || analysis.errors.length > 0) {
     ReactDOM.render(<AnalysisReport analysis={analysis} />, document.getElementById('root'));
   } else {

@@ -77,7 +77,6 @@ async function loadConfig(configUrl, analysis) {
     config.variables = variables;
     config.exports = rawConfig.exports;
     config.visible = rawConfig.visible;
-    config.values = rawConfig.values;
     config.scenes = {};
 
     analysis.info.push({ message: `Variables: ${R.keys(variables).join(', ')}` });

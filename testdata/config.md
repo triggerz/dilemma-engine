@@ -1,6 +1,7 @@
 # Config
  - Title: Leadership Challenges
  - Initial Scene: intro
+ - Max Value: 200
 
 # Variables
  - Time: 100

@@ -5,7 +5,6 @@ import sinon from 'sinon';
 import App from './App';
 import Scene from './Scene';
 
-
 describe('render', () => {
   it('renders the initial scene with the proper variables', () => {
     const initialScene = { config: { title: 'initial scene' } };
@@ -53,6 +52,7 @@ describe('completed', () => {
     const config = {
       initialScene: 'initialScene',
       variables,
+      maxValue: 100,
       scenes: { initialScene }
     };
     const wrapper = shallow(<App config={config} options={{ isEmbedded: true, uuid: '42' }} />);
@@ -63,7 +63,7 @@ describe('completed', () => {
     scene.onCompleted();
 
     expect(spy.args).toHaveLength(1);
-    expect(JSON.parse(spy.args[0][0])).toEqual({message: 'dilemma-submit', variables: { a: 17/200 }, uuid: '42'});
+    expect(JSON.parse(spy.args[0][0])).toEqual({message: 'dilemma-submit', variables: { a: 17/100 }, uuid: '42'});
   });
 
   it('sends a POST request if there is a response url defined', () => {
@@ -75,6 +75,7 @@ describe('completed', () => {
     const config = {
       initialScene: 'initialScene',
       variables,
+      maxValue: 200,
       responseUrl: 'some-server',
       scenes: { initialScene }
     };
