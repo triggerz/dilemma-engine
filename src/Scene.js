@@ -89,7 +89,7 @@ class Scene extends Component {
           <Gauge
             key={varName}
             value={value}
-            max={R.path(['values', 'max'], this.props) || 200 /* 200 is also referenced as the max value when we submit results. Should be consolidated at some point*/}
+            max={this.props.config.maxValue}
             width={90}
             height={64}
             label={varName}

@@ -10,7 +10,6 @@ class App extends Component {
       variables: props.config.variables,
       exports: props.config.exports,
       visible: props.config.visible,
-      values: props.config.values
     };
   }
 
@@ -33,9 +32,7 @@ class App extends Component {
     }.bind(this), this.state.variables)
     : this.state.variables;
 
-    const normalizedReturnVariables = this.props.config.maxValue
-
-    const normalizedReturnVariables = R.map(value => value / (R.path(['values', 'max'], this.state) || 200), returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
+    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
 
     if (this.props.options.isEmbedded) {
       console.log(`## Dilemma engine: posting message to parent`);
@@ -73,7 +70,7 @@ class App extends Component {
           <header>
             <h1>{activeSceneConfig.config.title}</h1>
           </header>
-          <Scene values={this.state.values} visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
+          <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>
       </div>
     );
