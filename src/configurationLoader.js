@@ -17,7 +17,8 @@ export async function fetchMarkdownConfig(url) {
 }
 
 async function fetchMarkdownConfigFromFirstOf(urlList) {
-  for (const url of urlList) {
+  for (let i = 0; i < urlList.length; i++) {
+    const url = urlList[i];
     try {
       const result = await fetchMarkdownConfig(url);
       return result;
