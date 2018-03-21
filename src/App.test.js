@@ -48,20 +48,44 @@ describe('navigate', () => {
 describe('completed', () => {
   it('responds to the parent when embedded', () => {
     const initialScene = { config: { title: 'initial scene' } };
-    const variables = {};
+    const variables = { a: 17 };
     
     const config = {
       initialScene: 'initialScene',
       variables,
       scenes: { initialScene }
     };
-    const wrapper = shallow(<App config={config} options={{ isEmbedded: true }} />);
+    const wrapper = shallow(<App config={config} options={{ isEmbedded: true, uuid: '42' }} />);
     const scene = wrapper.find(Scene).at(0).props();
 
     const spy = sinon.spy();
     window.parent.postMessage = spy;
     scene.onCompleted();
 
-    expect(spy.called).toBe(true);
+    expect(spy.args).toHaveLength(1);
+    expect(JSON.parse(spy.args[0][0])).toMatchObject({message: 'dilemma-submit', variables: { a: 17/200 }, uuid: '42'});
   });
+
+  it('sends a POST request if there is a response url defined', () => {
+    global.fetch.reset();
+
+    const initialScene = { config: { title: 'initial scene' } };
+    const variables = {a: 17};
+    
+    const config = {
+      initialScene: 'initialScene',
+      variables,
+      responseUrl: 'some-server',
+      scenes: { initialScene }
+    };
+    const wrapper = shallow(<App config={config} options={{ isEmbedded: false, uuid: '42' }} />);
+    const scene = wrapper.find(Scene).at(0).props();
+
+    scene.onCompleted();
+
+    expect(global.fetch.args).toHaveLength(1);
+    expect(global.fetch.args[0][0]).toEqual('some-server');
+    expect(global.fetch.args[0][1].body.get('uuid')).toBe('42');
+    expect(global.fetch.args[0][1].body.get('variables')).toBe(`{"a":${17/200}}`);
+  })
 });

@@ -33,13 +33,14 @@ class App extends Component {
         variables: normalizedReturnVariables
       });
       window.parent.postMessage(message, '*');
-    } else if (this.props.config.ReponseUrl) {
-      console.log(`## Dilemma engine: sending response to ${this.props.config.ReponseUrl}`);
+    } else if (this.props.config.responseUrl) {
+      console.log(`## Dilemma engine: sending response to ${this.props.config.responseUrl}`);
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
       fd.append('variables', JSON.stringify(normalizedReturnVariables));
-      fetch(`${this.props.config.ReponseUrl}`, {
+      fetch(`${this.props.config.responseUrl}`, {
         method: 'POST',
+        mode: 'no-cors',
         body: fd
       });
     }
