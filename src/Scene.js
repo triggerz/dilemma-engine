@@ -10,7 +10,8 @@ class Scene extends Component {
     super(props);
     this.state = {
       mustChoose: props.config.choices.length > 0,
-      selectedChoice: null
+      selectedChoice: null,
+      clickedCompleted: false
     };
   }
 
@@ -28,6 +29,7 @@ class Scene extends Component {
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
     } else {
+      this.setState({clickedComplete: true});
       this.props.onCompleted();
     }
   }
@@ -166,7 +168,7 @@ class Scene extends Component {
         );
       } else {
         navigationButton = (
-          <button className="next-button" onClick={this.navigate.bind(this)}>Complete</button>
+          <button className="next-button" disabled={this.state.clickedComplete} onClick={this.navigate.bind(this)}>Complete</button>
         );
       }
     }

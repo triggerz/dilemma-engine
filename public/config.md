@@ -1,6 +1,7 @@
 # Config
  - Title: Daily Dilemmas
  - Initial Scene: intro
+ - Response Url: http://localhost:1719/observation/self/dilemma
 
 # Variables
  - strategic: 100

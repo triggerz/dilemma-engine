@@ -63,7 +63,7 @@ describe('completed', () => {
     scene.onCompleted();
 
     expect(spy.args).toHaveLength(1);
-    expect(JSON.parse(spy.args[0][0])).toMatchObject({message: 'dilemma-submit', variables: { a: 17/200 }, uuid: '42'});
+    expect(JSON.parse(spy.args[0][0])).toEqual({message: 'dilemma-submit', variables: { a: 17/200 }, uuid: '42'});
   });
 
   it('sends a POST request if there is a response url defined', () => {
