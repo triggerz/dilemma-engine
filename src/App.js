@@ -42,13 +42,13 @@ class App extends Component {
         variables: normalizedReturnVariables
       });
       window.parent.postMessage(message, '*');
-    } else if (this.props.config.responseUrl) {
-      console.log(`## Dilemma engine: sending response to ${this.props.config.responseUrl}`);
+    } else if (this.props.options.responseUrl) {
+      console.log(`## Dilemma engine: sending response to ${this.props.options.responseUrl}`);
       const fd = new FormData();
       fd.append('uuid', this.props.options.uuid);
       fd.append('variables', JSON.stringify(normalizedReturnVariables));
       try {
-        await fetch(`${this.props.config.responseUrl}`, {
+        await fetch(`${this.props.options.responseUrl}`, {
           method: 'POST',
           mode: 'no-cors',
           body: fd

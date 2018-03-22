@@ -76,10 +76,9 @@ describe('completed', () => {
       initialScene: 'initialScene',
       variables,
       maxValue: 200,
-      responseUrl: 'some-server',
       scenes: { initialScene }
     };
-    const wrapper = shallow(<App config={config} options={{ isEmbedded: false, uuid: '42' }} />);
+    const wrapper = shallow(<App config={config} options={{ isEmbedded: false, uuid: '42', responseUrl: 'some-server' }} />);
     const scene = wrapper.find(Scene).at(0).props();
 
     scene.onCompleted();

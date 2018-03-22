@@ -12,7 +12,8 @@ async function main() {
   const isEmbedded = !!searchParams.get('embed');
   const analyze = !!searchParams.get('analyze');
   const configUrl = searchParams.get('configUrl') || window.configUrl || '';
-  console.log(`## Dilemma engine: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}`);
+  const responseUrl = searchParams.get('responseUrl');
+  console.log(`## Dilemma engine: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
   
   const {config, analysis} = await loadScenes(configUrl);
 
@@ -23,7 +24,7 @@ async function main() {
   if (analyze || analysis.errors.length > 0) {
     ReactDOM.render(<AnalysisReport analysis={analysis} />, document.getElementById('root'));
   } else {
-    const options = { uuid, isEmbedded };
+    const options = { uuid, isEmbedded, responseUrl };
     ReactDOM.render(<App config={config} options={options} />, document.getElementById('root'));
   }
   registerServiceWorker();
