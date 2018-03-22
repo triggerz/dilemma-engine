@@ -6,6 +6,8 @@ import AnalysisReport from './AnalysisReport';
 import registerServiceWorker from './registerServiceWorker';
 import { loadScenes } from './configurationLoader';
 
+import pkg from '../package.json';
+
 async function main() {
   const searchParams = new URLSearchParams(window.location.search);
   const uuid = searchParams.get('uuid');
@@ -13,7 +15,7 @@ async function main() {
   const analyze = !!searchParams.get('analyze');
   const configUrl = searchParams.get('configUrl') || window.configUrl || '';
   const responseUrl = searchParams.get('responseUrl');
-  console.log(`## Dilemma engine: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
+  console.log(`## Dilemma engine v${pkg.version}: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
   
   const {config, analysis} = await loadScenes(configUrl);
 

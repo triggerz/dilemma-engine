@@ -24,6 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "deploy": "node script/deploy",
     "deploy-latest": "node script/deploy --latest"
   }
 }
