@@ -60,7 +60,6 @@ class Scene extends Component {
 
   render () {
     const combinedText = this.props.config.description;
-    console.log(combinedText, 'combinedText');
     const description = md(combinedText);
     const video = this.props.config.config.video && normalizeIfYoutubeLink(this.props.config.config.video);
     const image = this.props.config.config.image;
@@ -108,7 +107,6 @@ class Scene extends Component {
     if (this.state.mustChoose) {
       const choices = this.props.config.choices.map((choice, i) => {
         const choiceKey = `choice-${i}`;
-        console.log(choice.choice, 'choice.choice - must choose');
         const choiceText = md(choice.choice);
         return (
           <div key={choiceKey}>
@@ -123,7 +121,6 @@ class Scene extends Component {
         const choice = this.props.config.choices[this.state.selectedChoice];
         const sections = [];
         if (choice.choice) {
-          console.log(choice.choice, 'choice.choice - selectedChoice');
           sections.push({
             id: 'choice-text',
             title: 'Your response',
@@ -132,7 +129,6 @@ class Scene extends Component {
         }
 
         if (choice.feedback) {
-          console.log(choice.feedback, 'choice.feedback');
           sections.push({
             id: 'feedback',
             title: 'Feedback',
@@ -141,7 +137,6 @@ class Scene extends Component {
         }
 
         if (choice.outcome) {
-          console.log(choice.outcome, 'choice.outcome');
           sections.push({
             id: 'outcome',
             title: 'Outcome',

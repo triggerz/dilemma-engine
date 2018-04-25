@@ -7,8 +7,7 @@ function getYoutubeId(url) {
 }
 
 export default function normalizeIfYoutubeLink(url) {
-  console.log(url);
-  const youtubeId = typeof url === 'string' && getYoutubeId(url);
+  const youtubeId = getYoutubeId(url);
   if (youtubeId) {
     return `https://www.youtube.com/embed/${youtubeId}`;
   } else {
