@@ -117,7 +117,7 @@ class Scene extends Component {
         const choiceText = md(choice.choice);
         return (
           <div key={choiceKey}>
-            <input type="radio" name="choice" id={choiceKey} value={i} onChange={this.onSelectChoice.bind(this)} />
+            <input type="radio" name="choice" id={choiceKey} value={i} checked={this.state.selectedChoice === `${i}`} onChange={this.onSelectChoice.bind(this)} />
             <label htmlFor={choiceKey} dangerouslySetInnerHTML={{ __html: choiceText }} />
           </div>
         );
@@ -167,12 +167,13 @@ class Scene extends Component {
     let navigationButton;
     if (this.state.mustChoose && hasFeedback) {
       navigationButton = (
-        <button className="next-button" disabled={ !this.state.selectedChoice } onClick={this.onChoose.bind(this)}>Choose</button>
+        <button className="next-button" disabled={!this.state.selectedChoice} onClick={this.onChoose.bind(this)}>Choose</button>
       );
     } else {
       if (this.props.config.config.next) {
+        const disabled = !!(this.state.mustChoose && !this.state.selectedChoice);
         navigationButton = (
-          <button className="next-button" onClick={this.navigate.bind(this)}>Next</button>
+          <button className="next-button" disabled={disabled} onClick={this.navigate.bind(this)}>Next</button>
         );
       } else {
         navigationButton = (
