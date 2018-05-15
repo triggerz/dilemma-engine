@@ -15,7 +15,7 @@ async function main() {
   const analyze = !!searchParams.get('analyze');
   const configUrl = searchParams.get('configUrl') || window.configUrl || '';
   const responseUrl = searchParams.get('responseUrl');
-  console.log(`## Dilemma engine v${pkg.version}: Running, embed=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
+  console.log(`## Dilemma engine v${pkg.version}: Running, isEmbedded=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
   
   const {config, analysis} = await loadScenes(configUrl);
 
