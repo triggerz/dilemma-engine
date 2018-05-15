@@ -26,6 +26,33 @@ describe('loadScene', () => {
       }
     });
   });
+
+  it('loads a scene with various missing sections', async () => {
+    const { scene } = await loadScene('', 'partial');
+
+    expect(scene.choices.length).toEqual(4);
+    expect(scene.choices[0]).toEqual({
+      choice: 'This first choice has everything',
+      variables: { x: '+1' },
+      feedback: 'You did well',
+      outcome: 'Everything\'s a bit better'
+    });
+
+    expect(scene.choices[1]).toEqual({
+      choice: 'This second one is missing variables',
+      feedback: '..but there is still feedback',
+      outcome: 'And an outcome'
+    });
+
+    expect(scene.choices[2]).toEqual({
+      choice: 'One missing everything'
+    });
+
+    expect(scene.choices[3]).toEqual({
+      choice: 'And a last one with just some variables',
+      variables: { x: '+2' }
+    });
+  });
 });
 
 describe('loadScenes', () => {

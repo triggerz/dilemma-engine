@@ -1,20 +1,32 @@
 var R = require('ramda');
 var md = require('marked');
 
-function parse (str) {
+function parse (str, arrayHeaders = []) {
   const tokens = md.lexer(str);
 
   let currentSection = {};
   let sections = {};
+  let currentArray = null;
 
   tokens.forEach(token => {
     if (token.type === 'heading') {
       const sectionName = normalize(token.text);
-      if (!sections.hasOwnProperty(sectionName)) {
-        sections[sectionName] = [];
+      if (R.contains(sectionName, arrayHeaders)) {
+        currentArray = `${sectionName}s`;
+        if (!sections.hasOwnProperty(currentArray)) {
+          sections[currentArray] = [];
+        }
+        currentSection = {};
+        sections[currentArray].push({[sectionName]: currentSection});
+      } else {
+        currentSection = {};
+        if (currentArray) {
+          const index = sections[currentArray].length - 1;
+          sections[currentArray][index][sectionName] = currentSection;
+        } else {
+          sections[sectionName] = currentSection;
+        }
       }
-      currentSection = {};
-      sections[sectionName].push(currentSection);
     } else if (token.type === 'text') {
       if (token.text.indexOf(':') !== -1) {
         const rawKey = token.text.substr(0, token.text.indexOf(':'));
@@ -35,23 +47,24 @@ function parse (str) {
     }
   });
 
-  sections = R.map(section => {
-    section = R.map(element => {
+  const traverse = obj => {
+    if (typeof obj === 'string') {
+      return obj;
+    }
+    if (R.keys(obj).length === 0) {
+      return '';
+    }
+
+    return R.map(element => {
       // If there is only text, turn the object into a string.
       if (element.hasOwnProperty('(text)') && Object.keys(element).length === 1) {
         return element['(text)'];
       }
-      return element;
-    }, section);
+      return traverse(element);
+    }, obj);
+  };
 
-    // If there is only one heading with this title, don't make it an array.
-    if (section.length === 1) {
-      return section[0];
-    }
-    return section;
-  }, sections);
-
-  return sections;
+  return traverse(sections);
 }
 
 module.exports = parse;

@@ -12,7 +12,7 @@ export async function fetchMarkdownConfig(url) {
   if (markdown.indexOf('<!DOCTYPE HTML>') === 0) {
     throw new Error(`${url} not found`);
   }
-  const o = parse(markdown);
+  const o = parse(markdown, ['choice']);
   return o;
 }
 
@@ -43,18 +43,10 @@ export async function loadScene(configUrl, sceneId) {
     subsequentSceneIds = [rawScene.config.next];
   }
 
-  const choiceCount = (rawScene.choice && rawScene.choice.length) || 0;
-  const choices = R.range(0, choiceCount).map(index => ({
-    choice: rawScene.choice[index],
-    feedback: rawScene.feedback[index],
-    outcome: rawScene.outcome && rawScene.outcome[index],
-    variables: rawScene.variables[index]
-  }));
-
   const scene = {
     config: rawScene.config,
     description: rawScene.description,
-    choices
+    choices: rawScene.choices || []
   };
 
   return { scene, subsequentSceneIds };

@@ -12,35 +12,48 @@ it('turns markdown into objects', () => {
   expect(output).toEqual({someObject: {'bullet1': 'value1', 'bullet2': 'value2'}});
 });
 
-it('should turn multiple headers of the same title into an array', () => {
+it('should construct arrays by special headers', () => {
   const input = `
 # Choice
 You go straight
 
-# Feedback
-That was smart
+# sub header 1
+First time
+
+# Choice
+
+# sub header 2
+Also first
 
 # Choice
 You go to...
 
 ..the left!
 
-# Feedback
-That was unfortunate
+
+# sub header 1
+Second time
 `;
 
-  const output = parse(input);
+  const output = parse(input, ['choice']);
+
   expect(output).toEqual({
-    choice: [
-      'You go straight',
-      'You go to...\n\n..the left!'
-    ],
-    feedback: [
-      'That was smart',
-      'That was unfortunate'
+    choices: [
+      {
+        choice: 'You go straight',
+        subHeader1: 'First time'
+      },
+      {
+        choice: '',
+        subHeader2: 'Also first'
+      },
+      {
+        choice: 'You go to...\n\n..the left!',
+        subHeader1: 'Second time'
+      }
     ]
   });
-});
+})
 
 it('should only use the first colon as a delimiter', () => {
   const input = `
