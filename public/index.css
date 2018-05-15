@@ -73,6 +73,14 @@ div.game {
 header h1 {
   color: #004266;
   margin: 0 0 0 16px;
+  position: relative;
+}
+
+header h1 span.progress {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: 16px;
 }
 
 .card h1 {

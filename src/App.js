@@ -7,6 +7,7 @@ class App extends Component {
     super(props);
     this.state = {
       activeSceneId: props.config.initialScene,
+      currentSceneIndex: 1,
       variables: props.config.variables,
       exports: props.config.exports,
       visible: props.config.visible,
@@ -20,7 +21,7 @@ class App extends Component {
   }
 
   onNavigate(sceneId) {
-    this.setState({ activeSceneId: sceneId });
+    this.setState({ activeSceneId: sceneId, currentSceneIndex: this.state.currentSceneIndex + 1 });
   }
 
   async onCompleted() {
@@ -64,11 +65,13 @@ class App extends Component {
   render() {
     const activeSceneConfig = this.props.config.scenes[this.state.activeSceneId];
     const variables = this.state.variables;
+    const sceneCount = R.values(this.props.config.scenes).length;
+    const progress = `${this.state.currentSceneIndex}/${sceneCount}`;
     return (
       <div className="main-container">
         <div className="main-container-buffer">
           <header>
-            <h1>{activeSceneConfig.config.title}</h1>
+            <h1>{activeSceneConfig.config.title}<span className="progress">{progress}</span></h1>
           </header>
           <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>
