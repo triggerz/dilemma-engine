@@ -70,17 +70,20 @@ div.game {
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-header h1 {
-  color: #004266;
-  margin: 0 0 0 16px;
+header {
   position: relative;
 }
 
-header h1 span.progress {
+header h1 {
+  color: #004266;
+  margin: 0 42px 0 16px;
+}
+
+header span.progress {
   position: absolute;
   right: 0;
   top: 0;
-  margin-right: 16px;
+  margin: 8px 16px;
 }
 
 .card h1 {

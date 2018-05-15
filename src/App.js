@@ -71,7 +71,8 @@ class App extends Component {
       <div className="main-container">
         <div className="main-container-buffer">
           <header>
-            <h1>{activeSceneConfig.config.title}<span className="progress">{progress}</span></h1>
+            <h1>{activeSceneConfig.config.title}</h1>
+            <span className="progress">{progress}</span>
           </header>
           <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
         </div>
