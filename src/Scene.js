@@ -24,23 +24,13 @@ class Scene extends Component {
     }
   }
 
-  navigate() {
-    let nextSceneId = this.props.config.config.next;
-    if (nextSceneId) {
-      this.props.onNavigate(nextSceneId);
-    } else {
-      this.setState({clickedComplete: true});
-      this.props.onCompleted();
-    }
-  }
-
   onSelectChoice(changeEvent) {
     this.setState({
       selectedChoice: changeEvent.target.value
     });
   }
 
-  onChoose() {
+  updateScores() {
     const choice = this.props.config.choices[this.state.selectedChoice];
     const varsToProcess = Object.keys(choice.variables);
 
@@ -51,11 +41,28 @@ class Scene extends Component {
       }
       this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
     });
+  }
 
+  onChoose() {
+    this.updateScores();
     this.setState({
       mustChoose: false
     })
+  }
 
+  navigate() {
+    const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.props.config.choices);
+    if (this.state.mustChoose && !hasFeedback) {
+      // No feedback, so we need to update the scores here instead.
+      this.updateScores();
+    }
+    let nextSceneId = this.props.config.config.next;
+    if (nextSceneId) {
+      this.props.onNavigate(nextSceneId);
+    } else {
+      this.setState({clickedComplete: true});
+      this.props.onCompleted();
+    }
   }
 
   render () {
@@ -156,8 +163,9 @@ class Scene extends Component {
       }
     }
 
+    const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.props.config.choices);
     let navigationButton;
-    if (this.state.mustChoose) {
+    if (this.state.mustChoose && hasFeedback) {
       navigationButton = (
         <button className="next-button" disabled={ !this.state.selectedChoice } onClick={this.onChoose.bind(this)}>Choose</button>
       );

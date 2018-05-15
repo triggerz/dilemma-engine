@@ -64,4 +64,42 @@ it('should adjust variables according to rules when choosing', () => {
 
   const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
   expect(feedback).toEqual('<p>Good job</p>');
+  expect(nextSceneId).toEqual('Not updated yet');
+});
+
+it('should replace the choose button with a next button when there is no feedback/outcome defined', () => {
+  const sceneConfig = {
+    config: {
+      title: 'Some Scene',
+      next: 'first'
+    },
+    description: 'This scene is for testing',
+    choices: [
+      {
+        choice: 'first',
+        variables: {
+          a: '+10',
+          b: '-10',
+          c: 'round(a*b/7)'
+        }
+      }
+    ]
+  };
+  const variables = {
+    'a': 10,
+    'b': 50,
+    'c': 90
+  };
+
+  let nextSceneId = 'Not updated yet';
+  const wrapper = shallow(<Scene config={sceneConfig} variables={variables} onNavigate={(sceneId => nextSceneId = sceneId)} />);
+
+  wrapper.find('input#choice-0').simulate('change', {target: { value: '0' } });
+  const button = wrapper.find('button');
+  expect(button.text()).toEqual('Next');
+
+  button.simulate('click');
+  expect(variables).toEqual({ a: 20, b: 40, c: 114 });
+  expect(nextSceneId).toEqual('first');
+  
 });
