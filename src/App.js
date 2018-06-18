@@ -33,7 +33,7 @@ class App extends Component {
     }.bind(this), this.state.variables)
     : this.state.variables;
 
-    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables) // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
+    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables); // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
 
     if (this.props.options.isEmbedded) {
       console.log(`## Dilemma engine: posting message to parent`);
@@ -67,6 +67,7 @@ class App extends Component {
     const variables = this.state.variables;
     const sceneCount = R.values(this.props.config.scenes).length;
     const progress = `${this.state.currentSceneIndex}/${sceneCount}`;
+    const options = this.props.options;
     return (
       <div className="main-container">
         <div className="main-container-buffer">
@@ -74,7 +75,7 @@ class App extends Component {
             <h1>{activeSceneConfig.config.title}</h1>
             <span className="progress">{progress}</span>
           </header>
-          <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} />
+          <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} options={options} activeSceneId={this.state.activeSceneId} />
         </div>
       </div>
     );

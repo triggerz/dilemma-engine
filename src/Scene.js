@@ -16,17 +16,20 @@ class Scene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const selectedChoice = this.getAnswerFromLocalStorage();
     if (nextProps.config !== this.props.config) {  // If we're changing scene, reset choice selection
       this.setState({
         mustChoose: nextProps.config.choices.length > 0,
-        selectedChoice: null
+        selectedChoice
       })
     }
   }
 
   onSelectChoice(changeEvent) {
+    const selectedChoice = changeEvent.target.value;
+    this.saveToLocalStorage(selectedChoice);
     this.setState({
-      selectedChoice: changeEvent.target.value
+      selectedChoice
     });
   }
 
@@ -62,7 +65,23 @@ class Scene extends Component {
     } else {
       this.setState({clickedComplete: true});
       this.props.onCompleted();
+      window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
     }
+  }
+
+  saveToLocalStorage(selectedChoice) {
+    const key = `dilemma[${this.props.options.uuid}]`;
+    const savedString = window.localStorage.getItem(key);
+    const savedAnswers = (savedString && JSON.parse(savedString)) || {};
+    savedAnswers[this.props.activeSceneId] = selectedChoice;
+    window.localStorage.setItem(key, JSON.stringify(savedAnswers));
+  }
+
+  getAnswerFromLocalStorage() {
+    const key = `dilemma[${this.props.options.uuid}]`;
+    const savedString = window.localStorage.getItem(key);
+    const savedAnswers = (savedString && JSON.parse(savedString)) || {};
+    return savedAnswers[this.props.config.config.next];
   }
 
   render () {

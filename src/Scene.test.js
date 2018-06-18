@@ -103,3 +103,43 @@ it('should replace the choose button with a next button when there is no feedbac
   expect(nextSceneId).toEqual('first');
   
 });
+
+it.only('should save selected choices to local storage', () => {
+  const sceneConfig = {
+    config: {
+      title: 'Some scene',
+      next: 'first'
+    },
+    description: 'This scene is for testing',
+    choices: [
+      {
+        choice: 'first',
+        variables: {
+          a: '+10',
+          b: '-10',
+          c: 'round(a*b/7)'
+        }
+      }
+    ]
+  };
+  const options = {
+    uuid: 'Some uuid'
+  };
+  const activeSceneId = 'Some scene';
+  const variables = {
+    'a': 10,
+    'b': 50,
+    'c': 90
+  };
+
+  let nextSceneId = 'Not updated yet';
+  const wrapper = shallow(<Scene config={sceneConfig} variables={variables} onNavigate={(sceneId => nextSceneId = sceneId)} options={options} activeSceneId={activeSceneId} />);
+  let store = {};
+  window.localStorage = {
+    setItem: (key, value) => { store[key] = value + '' },
+    getItem: key => store[key],
+    removeItem: () => { store = {} }
+  };
+  wrapper.find('input#choice-0').simulate('change', {target: { value: 0 } });
+  expect(store).toEqual({'dilemma[Some uuid]': '{"Some scene":0}'});
+});
