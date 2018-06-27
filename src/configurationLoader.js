@@ -98,5 +98,7 @@ export async function loadScenes(configUrl) {
     analysis.errors.push(e);
   }
 
+  console.log(config);
+
   return {config, analysis};
 }
