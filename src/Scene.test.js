@@ -54,9 +54,16 @@ it('should adjust variables according to rules when choosing', () => {
     'b': 50,
     'c': 90
   };
-
+  const options = {
+    uuid: 'Some uuid'
+  };
   let nextSceneId = 'Not updated yet';
-  const wrapper = shallow(<Scene config={sceneConfig} variables={variables} onNavigate={(sceneId => nextSceneId = sceneId)} />);
+  const wrapper = shallow(<Scene config={sceneConfig} variables={variables} onNavigate={(sceneId => nextSceneId = sceneId)} options={options} />);
+  let store = {};
+  window.localStorage = {
+    setItem: (key, value) => { store[key] = value + '' },
+    getItem: key => store[key]
+  };
 
   wrapper.find('input#choice-0').simulate('change', {target: { value: '0' } });
   wrapper.find('button').simulate('click');
@@ -90,9 +97,16 @@ it('should replace the choose button with a next button when there is no feedbac
     'b': 50,
     'c': 90
   };
-
+  const options = {
+    uuid: 'Some uuid'
+  };
   let nextSceneId = 'Not updated yet';
-  const wrapper = shallow(<Scene config={sceneConfig} variables={variables} onNavigate={(sceneId => nextSceneId = sceneId)} />);
+  const wrapper = shallow(<Scene config={sceneConfig} variables={variables} onNavigate={(sceneId => nextSceneId = sceneId)} options={options} />);
+  let store = {};
+  window.localStorage = {
+    setItem: (key, value) => { store[key] = value + '' },
+    getItem: key => store[key]
+  };
 
   wrapper.find('input#choice-0').simulate('change', {target: { value: '0' } });
   const button = wrapper.find('button');
@@ -101,10 +115,9 @@ it('should replace the choose button with a next button when there is no feedbac
   button.simulate('click');
   expect(variables).toEqual({ a: 20, b: 40, c: 114 });
   expect(nextSceneId).toEqual('first');
-  
 });
 
-it.only('should save selected choices to local storage', () => {
+it('should save selected choices to local storage', () => {
   const sceneConfig = {
     config: {
       title: 'Some scene',

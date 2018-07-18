@@ -13,7 +13,8 @@ describe('render', () => {
     const config = {
       initialScene: 'initialScene',
       variables,
-      scenes: { initialScene }
+      scenes: { initialScene },
+      reviewFeedback: false
     };
     const wrapper = shallow(<App config={config} />);
     
@@ -33,7 +34,8 @@ describe('navigate', () => {
     const config = {
       initialScene: 'initialScene',
       variables,
-      scenes: { initialScene, scene2 }
+      scenes: { initialScene, scene2 },
+      reviewFeedback: false
     };
     const wrapper = shallow(<App config={config} />);
     const scene = wrapper.find(Scene).at(0).props();
@@ -53,7 +55,8 @@ describe('completed', () => {
       initialScene: 'initialScene',
       variables,
       maxValue: 100,
-      scenes: { initialScene }
+      scenes: { initialScene },
+      reviewFeedback: false
     };
     const wrapper = shallow(<App config={config} options={{ isEmbedded: true, uuid: '42' }} />);
     const scene = wrapper.find(Scene).at(0).props();
@@ -76,7 +79,8 @@ describe('completed', () => {
       initialScene: 'initialScene',
       variables,
       maxValue: 200,
-      scenes: { initialScene }
+      scenes: { initialScene },
+      reviewFeedback: false
     };
     const wrapper = shallow(<App config={config} options={{ isEmbedded: false, uuid: '42', responseUrl: 'some-server' }} />);
     const scene = wrapper.find(Scene).at(0).props();

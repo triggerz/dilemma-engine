@@ -11,13 +11,14 @@ class Scene extends Component {
     this.state = {
       mustChoose: props.config.choices.length > 0,
       selectedChoice: null,
-      clickedCompleted: false
+      clickedComplete: false,
+      showingFeedback: false
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const selectedChoice = this.getAnswerFromLocalStorage();
-    if (nextProps.config !== this.props.config) {  // If we're changing scene, reset choice selection
+    if (nextProps.config !== this.props.config && !this.state.showingFeedback) {  // If we're changing scene, reset choice selection
       this.setState({
         mustChoose: nextProps.config.choices.length > 0,
         selectedChoice
@@ -50,12 +51,13 @@ class Scene extends Component {
     this.updateScores();
     this.setState({
       mustChoose: false
-    })
+    });
+    this.props.reviewFeedback && this.navigate();
   }
 
   navigate() {
     const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.props.config.choices);
-    if (this.state.mustChoose && !hasFeedback) {
+    if (this.state.mustChoose && !hasFeedback && !this.state.showingFeedback) {
       // No feedback, so we need to update the scores here instead.
       this.updateScores();
     }
@@ -63,25 +65,80 @@ class Scene extends Component {
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
     } else {
-      this.setState({clickedComplete: true});
-      this.props.onCompleted();
-      window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
+      if (this.props.reviewFeedback && !this.state.showingFeedback) {
+        this.setState({
+          showingFeedback: true
+        });
+        this.props.onNavigate(this.props.firstScene);
+      } else {
+        window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
+        this.setState({clickedComplete: true});
+        this.props.onCompleted();
+      }
+      if (this.state.showingFeedback) {
+        window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
+        this.setState({
+          showingFeedback: false
+        });
+      }
     }
   }
 
-  saveToLocalStorage(selectedChoice) {
+  getAllAnswersFromLocalStorage() {
     const key = `dilemma[${this.props.options.uuid}]`;
     const savedString = window.localStorage.getItem(key);
-    const savedAnswers = (savedString && JSON.parse(savedString)) || {};
+    return (savedString && JSON.parse(savedString)) || {};
+  }
+
+  saveToLocalStorage(selectedChoice) {
+    const savedAnswers = this.getAllAnswersFromLocalStorage();
     savedAnswers[this.props.activeSceneId] = selectedChoice;
-    window.localStorage.setItem(key, JSON.stringify(savedAnswers));
+    window.localStorage.setItem(`dilemma[${this.props.options.uuid}]`, JSON.stringify(savedAnswers));
   }
 
   getAnswerFromLocalStorage() {
-    const key = `dilemma[${this.props.options.uuid}]`;
-    const savedString = window.localStorage.getItem(key);
-    const savedAnswers = (savedString && JSON.parse(savedString)) || {};
+    const savedAnswers = this.getAllAnswersFromLocalStorage();
     return savedAnswers[this.props.config.config.next];
+  }
+
+  renderFeedback(choiceValue) {
+    const choice = this.props.config.choices[choiceValue];
+    const sections = [];
+    if (choice) {
+      if (choice.choice) {
+        sections.push({
+          id: 'choice-text',
+          title: 'Your response',
+          innerHtml: md(choice.choice)
+        });
+      }
+
+      if (choice.feedback) {
+        sections.push({
+          id: 'feedback',
+          title: 'Feedback',
+          innerHtml: md(choice.feedback)
+        });
+      }
+
+      if (choice.outcome) {
+        sections.push({
+          id: 'outcome',
+          title: 'Outcome',
+          innerHtml: md(choice.outcome)
+        });
+      }
+
+      return (
+        <div>
+          {sections.map(s => (
+            <div key={s.id}>
+              <h1>{s.title}</h1>
+              <div id={s.id} dangerouslySetInnerHTML={{ __html: s.innerHtml }} />
+            </div>))}
+        </div>
+      );
+    }
   }
 
   render () {
@@ -92,13 +149,13 @@ class Scene extends Component {
     const videoPanel = (
      <div className="card video">
        <div className="container">
-         <iframe title="embedded video" src={video} frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen></iframe>
+         <iframe title="embedded video" src={video} frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen />
        </div>
      </div>
     );
     const imagePanel = (
      <div className="card image">
-       <img src={image} alt=""></img>
+       <img src={image} alt="" />
      </div>
     );
 
@@ -106,8 +163,8 @@ class Scene extends Component {
       ? R.filter(v => (this.props.visible[v] && this.props.visible[v].toLowerCase() === 'true'), R.keys(this.props.variables))
       : R.keys(this.props.variables);
 
-    var totalVarNameIndex = R.indexOf('total', varNames);
-    var sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
+    const totalVarNameIndex = R.indexOf('total', varNames);
+    const sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
       const value = this.props.variables[varName];
       return (
@@ -130,7 +187,7 @@ class Scene extends Component {
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;
 
     let choicePanel;
-    if (this.state.mustChoose) {
+    if (this.state.mustChoose && !this.state.showingFeedback) {
       const choices = this.props.config.choices.map((choice, i) => {
         const choiceKey = `choice-${i}`;
         const choiceText = md(choice.choice);
@@ -144,53 +201,23 @@ class Scene extends Component {
       choicePanel = choices.length ? <form className="choices-panel">{choices}</form> : null;
     } else {
       if(this.state.selectedChoice) {
-        const choice = this.props.config.choices[this.state.selectedChoice];
-        const sections = [];
-        if (choice.choice) {
-          sections.push({
-            id: 'choice-text',
-            title: 'Your response',
-            innerHtml: md(choice.choice)
-          });
-        }
-
-        if (choice.feedback) {
-          sections.push({
-            id: 'feedback',
-            title: 'Feedback',
-            innerHtml: md(choice.feedback)
-          });
-        }
-
-        if (choice.outcome) {
-          sections.push({
-            id: 'outcome',
-            title: 'Outcome',
-            innerHtml: md(choice.outcome)
-          });
-        }
-
-        choicePanel = (
-          <div>
-            {sections.map(s => (
-              <div key={s.id}>
-                <h1>{s.title}</h1>
-                <div id={s.id} dangerouslySetInnerHTML={{ __html: s.innerHtml }} />
-              </div>))}
-          </div>
-        );
+        choicePanel = this.renderFeedback(this.state.selectedChoice);
+      }
+      if (this.state.showingFeedback) {
+        const savedAnswers = this.getAllAnswersFromLocalStorage();
+        choicePanel = this.renderFeedback(savedAnswers[this.props.activeSceneId]);
       }
     }
 
     const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.props.config.choices);
     let navigationButton;
-    if (this.state.mustChoose && hasFeedback) {
+    if (this.state.mustChoose && hasFeedback && !this.state.showingFeedback) {
       navigationButton = (
         <button className="next-button" disabled={!this.state.selectedChoice} onClick={this.onChoose.bind(this)}>Choose</button>
       );
     } else {
       if (this.props.config.config.next) {
-        const disabled = !!(this.state.mustChoose && !this.state.selectedChoice);
+        const disabled = !!(this.state.mustChoose && !this.state.selectedChoice && !this.state.showingFeedback);
         navigationButton = (
           <button className="next-button" disabled={disabled} onClick={this.navigate.bind(this)}>Next</button>
         );

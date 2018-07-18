@@ -63,11 +63,15 @@ class App extends Component {
   }
 
   render() {
-    const activeSceneConfig = this.props.config.scenes[this.state.activeSceneId];
+    const activeSceneId = this.state.activeSceneId;
+    const activeSceneConfig = this.props.config.scenes[activeSceneId];
     const variables = this.state.variables;
-    const sceneCount = R.values(this.props.config.scenes).length;
+    const reviewFeedback = JSON.parse(this.props.config.reviewFeedback);
+    const sceneLength = R.values(this.props.config.scenes).length;
+    const sceneCount = reviewFeedback ? sceneLength * 2 - 1 : sceneLength;
     const progress = `${this.state.currentSceneIndex}/${sceneCount}`;
     const options = this.props.options;
+    const firstScene = R.filter(key => key !== 'intro' && key !== 'outro', R.keys(this.props.config.scenes))[0]; // scene for first question
     return (
       <div className="main-container">
         <div className="main-container-buffer">
@@ -75,7 +79,7 @@ class App extends Component {
             <h1>{activeSceneConfig.config.title}</h1>
             <span className="progress">{progress}</span>
           </header>
-          <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} options={options} activeSceneId={this.state.activeSceneId} />
+          <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} options={options} activeSceneId={activeSceneId} firstScene={firstScene} reviewFeedback={reviewFeedback} />
         </div>
       </div>
     );
