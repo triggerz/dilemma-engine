@@ -55,7 +55,7 @@ class App extends Component {
           body: fd
         });
       } catch (e) {}
-        
+
       window.close();
     } else {
       console.log('## Dilemma engine: no complete-action specified. Results are: ', normalizedReturnVariables);
@@ -66,7 +66,7 @@ class App extends Component {
     const activeSceneId = this.state.activeSceneId;
     const activeSceneConfig = this.props.config.scenes[activeSceneId];
     const variables = this.state.variables;
-    const reviewFeedback = JSON.parse(this.props.config.reviewFeedback);
+    const reviewFeedback = this.props.config.reviewFeedback && JSON.parse(this.props.config.reviewFeedback);
     const sceneLength = R.values(this.props.config.scenes).length;
     const sceneCount = reviewFeedback ? sceneLength * 2 - 1 : sceneLength;
     const progress = `${this.state.currentSceneIndex}/${sceneCount}`;
