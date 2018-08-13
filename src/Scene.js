@@ -5,6 +5,11 @@ import math from 'mathjs';
 import * as R from 'ramda';
 import normalizeIfYoutubeLink from './youtube';
 
+// Helper function from the Ramda cookbook:
+//    mapKeys :: (String -> String) -> Object -> Object
+const mapKeys = R.curry((fn, obj) =>
+  R.fromPairs(R.map(R.adjust(fn, 0), R.toPairs(obj))));
+
 class Scene extends Component {
   constructor (props) {
     super(props);
@@ -43,12 +48,15 @@ class Scene extends Component {
       if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
         expression = `${v} + ${expression}`;
       }
+      
+      // Map names with dashes to the equivalent with underscores.
+      const normalizeName = name => name.replace('-', '_');
+      
+      const names = R.keys(this.props.variables);
+      const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
+      const normalizedVariables = mapKeys(normalizeName, this.props.variables);
 
-      // TODO: Variable names can contain dashes (-) which breaks the evaluation enging.
-      // A possible solution would be to quickly map the variables passed in with renames (some-score -> some_score),
-      // and a replace on the expression.
-
-      this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
+      this.props.variables[v] = math.eval(normalizedExpression, normalizedVariables);
     });
   }
 

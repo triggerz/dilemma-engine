@@ -42,15 +42,15 @@ it('should adjust variables according to rules when choosing', () => {
         feedback: 'Good job',
         outcome: 'Everybody is happy',
         variables: {
-          a: '+10',
+          'a-x': '+10',
           b: '-10',
-          c: 'round(a*b/7)'
+          c: 'round(a-x*b/7)'
         }
       }
     ]
   };
   const variables = {
-    'a': 10,
+    'a-x': 10,
     'b': 50,
     'c': 90
   };
@@ -67,7 +67,7 @@ it('should adjust variables according to rules when choosing', () => {
 
   wrapper.find('input#choice-0').simulate('change', {target: { value: '0' } });
   wrapper.find('button').simulate('click');
-  expect(variables).toEqual({ a: 20, b: 40, c: 114 });
+  expect(variables).toEqual({ 'a-x': 20, b: 40, c: 114 });
 
   const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
   expect(feedback).toEqual('<p>Good job</p>');
@@ -85,15 +85,15 @@ it('should replace the choose button with a next button when there is no feedbac
       {
         choice: 'first',
         variables: {
-          a: '+10',
+          'a-x': '+10',
           b: '-10',
-          c: 'round(a*b/7)'
+          c: 'round(a-x*b/7)'
         }
       }
     ]
   };
   const variables = {
-    'a': 10,
+    'a-x': 10,
     'b': 50,
     'c': 90
   };
@@ -113,7 +113,7 @@ it('should replace the choose button with a next button when there is no feedbac
   expect(button.text()).toEqual('Next');
 
   button.simulate('click');
-  expect(variables).toEqual({ a: 20, b: 40, c: 114 });
+  expect(variables).toEqual({ 'a-x': 20, b: 40, c: 114 });
   expect(nextSceneId).toEqual('first');
 });
 
@@ -128,7 +128,7 @@ it('should save selected choices to local storage', () => {
       {
         choice: 'first',
         variables: {
-          a: '+10',
+          'a-x': '+10',
           b: '-10',
           c: 'round(a*b/7)'
         }
