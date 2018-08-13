@@ -43,6 +43,11 @@ class Scene extends Component {
       if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
         expression = `${v} + ${expression}`;
       }
+
+      // TODO: Variable names can contain dashes (-) which breaks the evaluation enging.
+      // A possible solution would be to quickly map the variables passed in with renames (some-score -> some_score),
+      // and a replace on the expression.
+
       this.props.variables[v] = math.eval(expression.toLowerCase(), this.props.variables);
     });
   }
