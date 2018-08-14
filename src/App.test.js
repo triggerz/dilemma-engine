@@ -7,40 +7,52 @@ import Scene from './Scene';
 
 describe('render', () => {
   it('renders the initial scene with the proper variables', () => {
+    let store = {};
+    window.localStorage = {
+      setItem: (key, value) => { store[key] = value + '' },
+      getItem: key => store[key],
+      removeItem: () => { store = {} }
+    };
     const initialScene = { config: { title: 'initial scene' } };
     const variables = {};
-    
+
     const config = {
       initialScene: 'initialScene',
       variables,
       scenes: { initialScene },
       reviewFeedback: false
     };
-    const wrapper = shallow(<App config={config} />);
-    
+    const wrapper = shallow(<App config={config} options={{ isEmbedded: true, uuid: '42' }} />);
+
     expect(wrapper.find(Scene)).toHaveLength(1);
     const scene = wrapper.find(Scene).at(0).props();
     expect(scene.config).toBe(initialScene);
     expect(scene.variables).toBe(variables);
   });
 });
-  
+
 describe('navigate', () => {
   it('navigates when the scene requests it', () => {
+    let store = {};
+    window.localStorage = {
+      setItem: (key, value) => { store[key] = value + '' },
+      getItem: key => store[key],
+      removeItem: () => { store = {} }
+    };
     const initialScene = { config: { title: 'Initial Scene'} };
     const scene2 = { config: {title: 'Scene #2' } };
     const variables = {};
-    
+
     const config = {
       initialScene: 'initialScene',
       variables,
       scenes: { initialScene, scene2 },
       reviewFeedback: false
     };
-    const wrapper = shallow(<App config={config} />);
+    const wrapper = shallow(<App config={config} options={{ isEmbedded: true, uuid: '42' }} />);
     const scene = wrapper.find(Scene).at(0).props();
     scene.onNavigate('scene2');
-    
+
     const updatedScene = wrapper.update().find(Scene).at(0).props();
     expect(updatedScene.config).toBe(scene2);
   });
@@ -48,9 +60,15 @@ describe('navigate', () => {
 
 describe('completed', () => {
   it('responds to the parent when embedded', () => {
+    let store = {};
+    window.localStorage = {
+      setItem: (key, value) => { store[key] = value + '' },
+      getItem: key => store[key],
+      removeItem: () => { store = {} }
+    };
     const initialScene = { config: { title: 'initial scene' } };
     const variables = { a: 17 };
-    
+
     const config = {
       initialScene: 'initialScene',
       variables,
@@ -70,11 +88,17 @@ describe('completed', () => {
   });
 
   it('sends a POST request if there is a response url defined', () => {
+    let store = {};
+    window.localStorage = {
+      setItem: (key, value) => { store[key] = value + '' },
+      getItem: key => store[key],
+      removeItem: () => { store = {} }
+    };
     global.fetch.reset();
 
     const initialScene = { config: { title: 'initial scene' } };
     const variables = {a: 17};
-    
+
     const config = {
       initialScene: 'initialScene',
       variables,

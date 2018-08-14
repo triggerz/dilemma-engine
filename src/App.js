@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 import Scene from './Scene';
+import localStorage from './localStorage';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSceneId: props.config.initialScene,
+      activeSceneId: localStorage.getInitialScene(props.config, props.options.uuid),
       currentSceneIndex: 1,
       variables: props.config.variables,
       exports: props.config.exports,
@@ -65,10 +66,11 @@ class App extends Component {
   render() {
     const activeSceneId = this.state.activeSceneId;
     const activeSceneConfig = this.props.config.scenes[activeSceneId];
+    const feedbackFor = R.path(['config', 'feedbackfor'], activeSceneConfig);
+    const sceneTitle = (feedbackFor ? this.props.config.scenes[feedbackFor] : activeSceneConfig).config.title;
     const variables = this.state.variables;
-    const reviewFeedback = this.props.config.reviewFeedback && JSON.parse(this.props.config.reviewFeedback);
     const sceneLength = R.values(this.props.config.scenes).length;
-    const sceneCount = reviewFeedback ? sceneLength * 2 - 1 : sceneLength;
+    const sceneCount = sceneLength;
     const progress = `${this.state.currentSceneIndex}/${sceneCount}`;
     const options = this.props.options;
     const firstScene = R.filter(key => key !== 'intro' && key !== 'outro', R.keys(this.props.config.scenes))[0]; // scene for first question
@@ -76,10 +78,10 @@ class App extends Component {
       <div className="main-container">
         <div className="main-container-buffer">
           <header>
-            <h1>{activeSceneConfig.config.title}</h1>
+            <h1>{sceneTitle}</h1>
             <span className="progress">{progress}</span>
           </header>
-          <Scene visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} options={options} activeSceneId={activeSceneId} firstScene={firstScene} reviewFeedback={reviewFeedback} />
+          <Scene scenes={this.props.config.scenes} visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} options={options} activeSceneId={activeSceneId} firstScene={firstScene} />
         </div>
       </div>
     );

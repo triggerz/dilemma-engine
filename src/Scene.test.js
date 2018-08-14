@@ -35,6 +35,7 @@ it('should adjust variables according to rules when choosing', () => {
       title: 'Some Scene',
       next: 'first'
     },
+    sceneId: '',
     description: 'This scene is for testing',
     choices: [
       {
@@ -71,7 +72,7 @@ it('should adjust variables according to rules when choosing', () => {
 
   const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
   expect(feedback).toEqual('<p>Good job</p>');
-  expect(nextSceneId).toEqual('Not updated yet');
+  expect(nextSceneId).toEqual('first');
 });
 
 it('should replace the choose button with a next button when there is no feedback/outcome defined', () => {

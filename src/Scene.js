@@ -4,6 +4,7 @@ import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
 import * as R from 'ramda';
 import normalizeIfYoutubeLink from './youtube';
+import localStorage from './localStorage';
 
 // Helper function from the Ramda cookbook:
 //    mapKeys :: (String -> String) -> Object -> Object
@@ -17,30 +18,34 @@ class Scene extends Component {
       mustChoose: props.config.choices.length > 0,
       selectedChoice: null,
       clickedComplete: false,
-      showingFeedback: false
+      scene: props.config
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const selectedChoice = this.getAnswerFromLocalStorage();
-    if (nextProps.config !== this.props.config && !this.state.showingFeedback) {  // If we're changing scene, reset choice selection
+    const nextSceneConfig = nextProps.config
+    const feedbackFor = R.path(['config', 'feedbackfor'], nextSceneConfig);
+    const nextSceneExpandedConfig = feedbackFor ? this.props.scenes[feedbackFor] : nextSceneConfig
+    const selectedChoice = localStorage.getAnswerFromLocalStorage(nextSceneExpandedConfig.sceneId, this.props.options.uuid);
+    if (nextProps.config !== this.props.config) {  // If we're changing scene, reset choice selection
       this.setState({
         mustChoose: nextProps.config.choices.length > 0,
-        selectedChoice
+        selectedChoice,
+        scene: nextSceneExpandedConfig
       })
     }
   }
 
   onSelectChoice(changeEvent) {
     const selectedChoice = changeEvent.target.value;
-    this.saveToLocalStorage(selectedChoice);
+    localStorage.saveToLocalStorage(selectedChoice, this.props.activeSceneId, this.props.options.uuid);
     this.setState({
       selectedChoice
     });
   }
 
   updateScores() {
-    const choice = this.props.config.choices[this.state.selectedChoice];
+    const choice = this.state.scene.choices[this.state.selectedChoice];
     const varsToProcess = Object.keys(choice.variables);
 
     varsToProcess.forEach(v => {
@@ -48,10 +53,10 @@ class Scene extends Component {
       if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
         expression = `${v} + ${expression}`;
       }
-      
+
       // Map names with dashes to the equivalent with underscores.
       const normalizeName = name => name.replace('-', '_');
-      
+
       const names = R.keys(this.props.variables);
       const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
       const normalizedVariables = mapKeys(normalizeName, this.props.variables);
@@ -65,12 +70,12 @@ class Scene extends Component {
     this.setState({
       mustChoose: false
     });
-    this.props.reviewFeedback && this.navigate();
+    this.navigate();
   }
 
   navigate() {
-    const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.props.config.choices);
-    if (this.state.mustChoose && !hasFeedback && !this.state.showingFeedback) {
+    const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.state.scene.choices);
+    if (this.state.mustChoose && !hasFeedback) {
       // No feedback, so we need to update the scores here instead.
       this.updateScores();
     }
@@ -78,44 +83,14 @@ class Scene extends Component {
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
     } else {
-      if (this.props.reviewFeedback && !this.state.showingFeedback) {
-        this.setState({
-          showingFeedback: true
-        });
-        this.props.onNavigate(this.props.firstScene);
-      } else {
-        window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
-        this.setState({clickedComplete: true});
-        this.props.onCompleted();
-      }
-      if (this.state.showingFeedback) {
-        window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
-        this.setState({
-          showingFeedback: false
-        });
-      }
+      window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
+      this.setState({clickedComplete: true});
+      this.props.onCompleted();
     }
   }
 
-  getAllAnswersFromLocalStorage() {
-    const key = `dilemma[${this.props.options.uuid}]`;
-    const savedString = window.localStorage.getItem(key);
-    return (savedString && JSON.parse(savedString)) || {};
-  }
-
-  saveToLocalStorage(selectedChoice) {
-    const savedAnswers = this.getAllAnswersFromLocalStorage();
-    savedAnswers[this.props.activeSceneId] = selectedChoice;
-    window.localStorage.setItem(`dilemma[${this.props.options.uuid}]`, JSON.stringify(savedAnswers));
-  }
-
-  getAnswerFromLocalStorage() {
-    const savedAnswers = this.getAllAnswersFromLocalStorage();
-    return savedAnswers[this.props.config.config.next];
-  }
-
   renderFeedback(choiceValue) {
-    const choice = this.props.config.choices[choiceValue];
+    const choice = this.state.scene.choices[choiceValue];
     const sections = [];
     if (choice) {
       if (choice.choice) {
@@ -155,10 +130,10 @@ class Scene extends Component {
   }
 
   render () {
-    const combinedText = this.props.config.description;
+    const combinedText = this.state.scene.description;
     const description = md(combinedText);
-    const video = this.props.config.config.video && normalizeIfYoutubeLink(this.props.config.config.video);
-    const image = this.props.config.config.image;
+    const video = this.state.scene.config.video && normalizeIfYoutubeLink(this.state.scene.config.video);
+    const image = this.state.scene.config.image;
     const videoPanel = (
      <div className="card video">
        <div className="container">
@@ -185,7 +160,7 @@ class Scene extends Component {
           <Gauge
             key={varName}
             value={value}
-            max={this.props.config.maxValue}
+            max={this.state.scene.maxValue}
             width={90}
             height={64}
             label={varName}
@@ -200,8 +175,8 @@ class Scene extends Component {
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;
 
     let choicePanel;
-    if (this.state.mustChoose && !this.state.showingFeedback) {
-      const choices = this.props.config.choices.map((choice, i) => {
+    if (this.state.mustChoose) {
+      const choices = this.state.scene.choices.map((choice, i) => {
         const choiceKey = `choice-${i}`;
         const choiceText = md(choice.choice);
         return (
@@ -216,21 +191,17 @@ class Scene extends Component {
       if(this.state.selectedChoice) {
         choicePanel = this.renderFeedback(this.state.selectedChoice);
       }
-      if (this.state.showingFeedback) {
-        const savedAnswers = this.getAllAnswersFromLocalStorage();
-        choicePanel = this.renderFeedback(savedAnswers[this.props.activeSceneId]);
-      }
     }
 
-    const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.props.config.choices);
+    const hasFeedback = R.any(choice => choice.feedback || choice.outcome, this.state.scene.choices);
     let navigationButton;
-    if (this.state.mustChoose && hasFeedback && !this.state.showingFeedback) {
+    if (this.state.mustChoose && hasFeedback) {
       navigationButton = (
         <button className="next-button" disabled={!this.state.selectedChoice} onClick={this.onChoose.bind(this)}>Choose</button>
       );
     } else {
-      if (this.props.config.config.next) {
-        const disabled = !!(this.state.mustChoose && !this.state.selectedChoice && !this.state.showingFeedback);
+      if (this.state.scene.config.next) {
+        const disabled = !!(this.state.mustChoose && !this.state.selectedChoice);
         navigationButton = (
           <button className="next-button" disabled={disabled} onClick={this.navigate.bind(this)}>Next</button>
         );

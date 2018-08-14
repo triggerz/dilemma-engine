@@ -1,9 +1,7 @@
 # Config
  - Title: Daily Dilemmas
  - Initial Scene: intro
- - Disabled Response Url: http://localhost:1719/observation/self/dilemma
  - Max Value: 200
- - Review Feedback: false
 
 # Variables
  - strategic: 100
@@ -18,6 +16,6 @@
 
 # Visible
 - total: true
-- strategic: false
+- strategic: true
 - accountability: true
 - ambiguity: true

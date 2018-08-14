@@ -29,7 +29,6 @@ async function fetchMarkdownConfigFromFirstOf(urlList) {
 }
 
 export async function loadScene(configUrl, sceneId) {
-  console.log('Loading scene ', sceneId);
 
   const rawScene = await fetchMarkdownConfigFromFirstOf([
     `${configUrl}scenes/${sceneId}.md`,
@@ -88,7 +87,7 @@ export async function loadScenes(configUrl) {
     while(unprocessedSceneIds.length > 0) {
       const sceneId = unprocessedSceneIds[0];
       const { scene, subsequentSceneIds } = await loadScene(configUrl, sceneId);
-      config.scenes[sceneId] = scene;
+      config.scenes[sceneId] = Object.assign({}, scene, {sceneId});
 
       unprocessedSceneIds = unprocessedSceneIds
       .concat(subsequentSceneIds)
