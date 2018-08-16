@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as R from 'ramda';
 import Scene from './Scene';
 import localStorage from './localStorage';
+import Progress from './Progress';
 
 class App extends Component {
   constructor(props) {
@@ -69,9 +70,6 @@ class App extends Component {
     const feedbackFor = R.path(['config', 'feedbackfor'], activeSceneConfig);
     const sceneTitle = (feedbackFor ? this.props.config.scenes[feedbackFor] : activeSceneConfig).config.title;
     const variables = this.state.variables;
-    const sceneLength = R.values(this.props.config.scenes).length;
-    const sceneCount = sceneLength;
-    const progress = `${this.state.currentSceneIndex}/${sceneCount}`;
     const options = this.props.options;
     const firstScene = R.filter(key => key !== 'intro' && key !== 'outro', R.keys(this.props.config.scenes))[0]; // scene for first question
     return (
@@ -79,9 +77,18 @@ class App extends Component {
         <div className="main-container-buffer">
           <header>
             <h1>{sceneTitle}</h1>
-            <span className="progress">{progress}</span>
+            <Progress config={this.props.config} activeSceneId={activeSceneId} />
           </header>
-          <Scene scenes={this.props.config.scenes} visible={this.state.visible} config={activeSceneConfig} variables={variables} onNavigate={this.onNavigate.bind(this)} onCompleted={this.onCompleted.bind(this)} options={options} activeSceneId={activeSceneId} firstScene={firstScene} />
+          <Scene
+            scenes={this.props.config.scenes}
+            visible={this.state.visible}
+            config={activeSceneConfig}
+            variables={variables}
+            onNavigate={this.onNavigate.bind(this)}
+            onCompleted={this.onCompleted.bind(this)}
+            options={options}
+            activeSceneId={activeSceneId}
+            firstScene={firstScene} />
         </div>
       </div>
     );

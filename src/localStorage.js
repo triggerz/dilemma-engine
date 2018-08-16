@@ -1,4 +1,5 @@
 var R = require('ramda');
+var helper = require('./helper');
 
 function getAllAnswersFromLocalStorage (uuid) {
   const key = `dilemma[${uuid}]`;
@@ -19,21 +20,10 @@ function getAnswerFromLocalStorage (next, uuid) {
 
 function getInitialScene (config, uuid) {
   const answers = getAllAnswersFromLocalStorage(uuid)
-  const initialSceneId = config.initialScene;
   if (R.isEmpty(answers)) {
-    return initialSceneId;
+    return config.initialScene;
   } else { // there are previous answers, so we should skip ahead to the first not answered
-    const initialScene = config.scenes[initialSceneId];
-    const numberOfScenes = R.values(config.scenes).length;
-    var hasAnswer, scene = initialScene, sceneId = initialSceneId, hasQuestion;
-    var sceneArray = []
-    for (var i = 0; i < numberOfScenes; i++) {
-      hasQuestion = !!scene.choices.length;
-      hasAnswer = !!answers[sceneId];
-      sceneArray.push({sceneId, scene, hasQuestion, hasAnswer});
-      sceneId = scene.config.next;
-      scene = sceneId && config.scenes[sceneId];
-    }
+    const sceneArray = helper.getOrderedSceneArray(config, answers);
     const lastAnsweredScene = R.findLast(scene => scene.hasAnswer)(sceneArray);
     return lastAnsweredScene.scene.config.next || lastAnsweredScene.sceneId;
   }
