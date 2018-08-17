@@ -83,7 +83,6 @@ class Scene extends Component {
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
     } else {
-      window.localStorage.removeItem(`dilemma[${this.props.options.uuid}]`);
       this.setState({clickedComplete: true});
       this.props.onCompleted();
     }
