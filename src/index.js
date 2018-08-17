@@ -18,11 +18,13 @@ async function main() {
   const configUrl = searchParams.get('configUrl') || window.configUrl || '';
   const responseUrl = searchParams.get('responseUrl');
   const previousAnswers = searchParams.get('systemPayload');
-  console.log(previousAnswers, '*********');
-  R.mapObjIndexed((selectedChoice, sceneId) => {
-    console.log(selectedChoice, '-------------');
-    localStorage.saveToLocalStorage(selectedChoice, sceneId, uuid);
-  }, previousAnswers);
+  if (previousAnswers) {
+    console.log(previousAnswers, '*********');
+    R.mapObjIndexed((selectedChoice, sceneId) => {
+      console.log(selectedChoice, '-------------');
+      localStorage.saveToLocalStorage(selectedChoice, sceneId, uuid);
+    }, JSON.parse(previousAnswers));
+  }
   console.log(`## Dilemma engine v${pkg.version}: Running, isEmbedded=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
 
   const {config, analysis} = await loadScenes(configUrl);
