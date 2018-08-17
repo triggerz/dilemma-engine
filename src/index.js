@@ -1,10 +1,12 @@
 import React from 'react';
+import * as R from 'ramda';
 import ReactDOM from 'react-dom';
 import 'url-search-params-polyfill';
 import App from './App';
 import AnalysisReport from './AnalysisReport';
 import registerServiceWorker from './registerServiceWorker';
 import { loadScenes } from './configurationLoader';
+import localStorage from './localStorage';
 
 import pkg from '../package.json';
 
@@ -15,8 +17,14 @@ async function main() {
   const analyze = !!searchParams.get('analyze');
   const configUrl = searchParams.get('configUrl') || window.configUrl || '';
   const responseUrl = searchParams.get('responseUrl');
+  const previousAnswers = searchParams.get('systemPayload');
+  console.log(previousAnswers, '*********');
+  R.mapObjIndexed((selectedChoice, sceneId) => {
+    console.log(selectedChoice, '-------------');
+    localStorage.saveToLocalStorage(selectedChoice, sceneId, uuid);
+  }, previousAnswers);
   console.log(`## Dilemma engine v${pkg.version}: Running, isEmbedded=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
-  
+
   const {config, analysis} = await loadScenes(configUrl);
 
   if (typeof config.maxValue === 'undefined') {
@@ -26,7 +34,7 @@ async function main() {
   if (analyze || analysis.errors.length > 0) {
     ReactDOM.render(<AnalysisReport analysis={analysis} />, document.getElementById('root'));
   } else {
-    const options = { uuid, isEmbedded, responseUrl };
+    const options = { uuid, isEmbedded, responseUrl, previousAnswers };
     ReactDOM.render(<App config={config} options={options} />, document.getElementById('root'));
   }
   registerServiceWorker();
