@@ -19,11 +19,10 @@ async function main() {
   const responseUrl = searchParams.get('responseUrl');
   const previousAnswers = searchParams.get('systemPayload');
   if (previousAnswers) {
-    console.log(previousAnswers, '*********');
+    const answers = JSON.parse(JSON.parse(previousAnswers));
     R.mapObjIndexed((selectedChoice, sceneId) => {
-      console.log(selectedChoice, '-------------');
       localStorage.saveToLocalStorage(selectedChoice, sceneId, uuid);
-    }, JSON.parse(previousAnswers));
+    }, answers);
   }
   console.log(`## Dilemma engine v${pkg.version}: Running, isEmbedded=${isEmbedded}, uuid=${uuid}, analyze=${analyze}, configUrl=${configUrl}, responseUrl=${responseUrl}`);
 
