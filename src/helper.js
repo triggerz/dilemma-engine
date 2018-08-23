@@ -5,7 +5,8 @@ function getOrderedSceneArray (config, answers) {
   const initialScene = config.scenes[initialSceneId];
   const numberOfScenes = R.values(config.scenes).length;
   var hasAnswer, scene = initialScene, sceneId = initialSceneId, hasQuestion;
-  var sceneArray = []
+  var sceneArray = [];
+
   for (var i = 0; i < numberOfScenes; i++) {
     hasQuestion = !!scene.choices.length;
     hasAnswer = answers && !!answers[sceneId];

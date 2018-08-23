@@ -23,9 +23,9 @@ class Scene extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextSceneConfig = nextProps.config
+    const nextSceneConfig = nextProps.config;
     const feedbackFor = R.path(['config', 'feedbackfor'], nextSceneConfig);
-    const nextSceneExpandedConfig = feedbackFor ? this.props.scenes[feedbackFor] : nextSceneConfig
+    const nextSceneExpandedConfig = feedbackFor ? this.props.scenes[feedbackFor] : nextSceneConfig;
     const selectedChoice = localStorage.getAnswerFromLocalStorage(nextSceneExpandedConfig.sceneId, this.props.options.uuid);
     if (nextProps.config !== this.props.config) {  // If we're changing scene, reset choice selection
       this.setState({
@@ -79,12 +79,15 @@ class Scene extends Component {
       // No feedback, so we need to update the scores here instead.
       this.updateScores();
     }
-    let nextSceneId = this.props.config.config.next;
+    const nextSceneId = this.props.config.config.next;
+    const lastQuestionId = R.findLast(scene => scene.hasQuestion)(this.props.sceneArray).sceneId;
+    if (this.props.activeSceneId === lastQuestionId) {
+      this.props.onCompleted();
+    }
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
     } else {
       this.setState({clickedComplete: true});
-      this.props.onCompleted();
     }
   }
 

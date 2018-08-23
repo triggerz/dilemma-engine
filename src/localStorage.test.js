@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
 import localStorage from './localStorage';
 
 describe('localStorage', function () {
@@ -19,7 +17,7 @@ describe('localStorage', function () {
 
   it('should saveToLocalStorage', () => {
     const selectedChoice = 'someChoice';
-    const activeSceneId = 'nextScene'
+    const activeSceneId = 'nextScene';
     localStorage.saveToLocalStorage(selectedChoice, activeSceneId, this.uuid);
     const answers = localStorage.getAllAnswersFromLocalStorage(this.uuid);
     expect(answers).toEqual({"nextScene": "someChoice"});

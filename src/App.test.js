@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import App from './App';
 import Scene from './Scene';
+import helper from './helper';
 
 describe('render', () => {
   it('renders the initial scene with the proper variables', () => {
@@ -13,6 +14,7 @@ describe('render', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
+    helper.getOrderedSceneArray = sinon.spy();
     const initialScene = { config: { title: 'initial scene' } };
     const variables = {};
 
@@ -23,7 +25,6 @@ describe('render', () => {
       reviewFeedback: false
     };
     const wrapper = shallow(<App config={config} options={{ isEmbedded: true, uuid: '42' }} />);
-
     expect(wrapper.find(Scene)).toHaveLength(1);
     const scene = wrapper.find(Scene).at(0).props();
     expect(scene.config).toBe(initialScene);
@@ -39,8 +40,9 @@ describe('navigate', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
+    helper.getOrderedSceneArray = sinon.spy();
     const initialScene = { config: { title: 'Initial Scene'} };
-    const scene2 = { config: {title: 'Scene #2' } };
+    const scene2 = { config: { title: 'Scene #2' } };
     const variables = {};
 
     const config = {
@@ -66,6 +68,7 @@ describe('completed', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
+    helper.getOrderedSceneArray = sinon.spy();
     const initialScene = { config: { title: 'initial scene' } };
     const variables = { a: 17 };
 
@@ -94,6 +97,7 @@ describe('completed', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
+    helper.getOrderedSceneArray = sinon.spy();
     global.fetch.reset();
 
     const initialScene = { config: { title: 'initial scene' } };

@@ -19,7 +19,7 @@ function getAnswerFromLocalStorage (next, uuid) {
 }
 
 function getInitialScene (config, uuid) {
-  const answers = getAllAnswersFromLocalStorage(uuid)
+  const answers = getAllAnswersFromLocalStorage(uuid);
   if (R.isEmpty(answers)) {
     return config.initialScene;
   } else { // there are previous answers, so we should skip ahead to the first not answered
