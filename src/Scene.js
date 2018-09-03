@@ -80,14 +80,11 @@ class Scene extends Component {
       this.updateScores();
     }
     const nextSceneId = this.props.config.config.next;
-    const lastQuestionId = R.findLast(scene => scene.hasQuestion)(this.props.sceneArray).sceneId;
-    if (this.props.activeSceneId === lastQuestionId) {
-      this.props.onCompleted();
-    }
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
     } else {
       this.setState({clickedComplete: true});
+      this.props.onCompleted();
     }
   }
 

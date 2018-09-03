@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as R from 'ramda';
 import Scene from './Scene';
 import localStorage from './localStorage';
-import helper from './helper';
 import Progress from './Progress';
 
 class App extends Component {
@@ -80,7 +79,6 @@ class App extends Component {
     const variables = this.state.variables;
     const options = this.props.options;
     const firstScene = R.filter(key => key !== 'intro' && key !== 'outro', R.keys(this.props.config.scenes))[0]; // scene for first question
-    const sceneArray = helper.getOrderedSceneArray(this.props.config, localStorage.getAllAnswersFromLocalStorage(this.props.options.uuid));
     return (
       <div className="main-container">
         <div className="main-container-buffer">
@@ -97,8 +95,7 @@ class App extends Component {
             onCompleted={this.onCompleted.bind(this)}
             options={options}
             activeSceneId={activeSceneId}
-            firstScene={firstScene}
-            sceneArray={sceneArray} />
+            firstScene={firstScene} />
         </div>
       </div>
     );

@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import App from './App';
 import Scene from './Scene';
-import helper from './helper';
 
 describe('render', () => {
   it('renders the initial scene with the proper variables', () => {
@@ -14,7 +13,6 @@ describe('render', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
-    helper.getOrderedSceneArray = sinon.spy();
     const initialScene = { config: { title: 'initial scene' } };
     const variables = {};
 
@@ -40,7 +38,6 @@ describe('navigate', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
-    helper.getOrderedSceneArray = sinon.spy();
     const initialScene = { config: { title: 'Initial Scene'} };
     const scene2 = { config: { title: 'Scene #2' } };
     const variables = {};
@@ -68,7 +65,6 @@ describe('completed', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
-    helper.getOrderedSceneArray = sinon.spy();
     const initialScene = { config: { title: 'initial scene' } };
     const variables = { a: 17 };
 
@@ -97,7 +93,6 @@ describe('completed', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
-    helper.getOrderedSceneArray = sinon.spy();
     global.fetch.reset();
 
     const initialScene = { config: { title: 'initial scene' } };

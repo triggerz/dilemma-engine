@@ -132,11 +132,6 @@ describe('onChoose', () => {
     expect(feedback).toEqual('<p>Good job</p>');
     expect(nextSceneId).toEqual('first');
   });
-
-  it('should submit the answers after last question is answered', () => {
-    expect(onCompleted.args).toEqual([[]]);
-    expect(onCompleted.calledOnce).toEqual(true);
-  });
 });
 
 describe('noFeedback', () => {
