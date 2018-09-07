@@ -46,23 +46,25 @@ class Scene extends Component {
 
   updateScores() {
     const choice = this.state.scene.choices[this.state.selectedChoice];
-    const varsToProcess = Object.keys(choice.variables);
+    if (choice.variables) {
+      const varsToProcess = choice.variables && Object.keys(choice.variables);
 
-    varsToProcess.forEach(v => {
-      let expression = choice.variables[v];
-      if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
-        expression = `${v} + ${expression}`;
-      }
+      varsToProcess.forEach(v => {
+        let expression = choice.variables[v];
+        if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
+          expression = `${v} + ${expression}`;
+        }
 
-      // Map names with dashes to the equivalent with underscores.
-      const normalizeName = name => name.replace('-', '_');
+        // Map names with dashes to the equivalent with underscores.
+        const normalizeName = name => name.replace('-', '_');
 
-      const names = R.keys(this.props.variables);
-      const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
-      const normalizedVariables = mapKeys(normalizeName, this.props.variables);
+        const names = R.keys(this.props.variables);
+        const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
+        const normalizedVariables = mapKeys(normalizeName, this.props.variables);
 
-      this.props.variables[v] = math.eval(normalizedExpression, normalizedVariables);
-    });
+        this.props.variables[v] = math.eval(normalizedExpression, normalizedVariables);
+      });
+    }
   }
 
   onChoose() {
