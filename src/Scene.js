@@ -55,7 +55,6 @@ class Scene extends Component {
         if (this.props.variables[v].export === 'per-page') {
           const value = Number(expression);
           this.props.variables[v].scores.push(value);
-
         } else {
           if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
             expression = `${v} + ${expression}`;

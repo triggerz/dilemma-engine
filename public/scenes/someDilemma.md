@@ -30,7 +30,7 @@ You experienced a positive effect in output (+2) but it costed some in Lilly's e
  - strategic: -1
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
+ - total: round(((accountability * ambiguity) / 100) - (0))
 
 
 # Choice
@@ -50,7 +50,7 @@ You experienced a positive effect in output (+2) but it costed some in Jonas's e
  - strategic: -1
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
+ - total: round(((accountability * ambiguity) / 100) - (0))
 
 
 # Choice
@@ -69,4 +69,4 @@ You experienced a negative effect in output (-4). No effect on neither engagemen
  - strategic: +0
  - accountability: +0
  - ambiguity: -4
- - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
+ - total: round(((accountability * ambiguity) / 100) - (0))
