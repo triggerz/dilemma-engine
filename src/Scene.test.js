@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import Scene from './Scene';
-import Gauge from 'react-svg-gauge';
+import ScoreGauge from './ScoreGauge';
 
 describe(<Scene />, () => {
   let wrapper;
@@ -39,10 +39,10 @@ describe(<Scene />, () => {
   });
 
   it('renders the initial scene with the proper variables', () => {
-    expect(wrapper.find(Gauge)).toHaveLength(3);
-    const gauge1 = wrapper.find(Gauge).at(0).props();
-    const gauge2 = wrapper.find(Gauge).at(1).props();
-    const gauge3 = wrapper.find(Gauge).at(2).props();
+    expect(wrapper.find(ScoreGauge)).toHaveLength(3);
+    const gauge1 = wrapper.find(ScoreGauge).at(0).props();
+    const gauge2 = wrapper.find(ScoreGauge).at(1).props();
+    const gauge3 = wrapper.find(ScoreGauge).at(2).props();
 //  expect(gauge1).toMatchObject({ value: 10, label: 'a', color: 'rgb(229, 26, 0)' });
 //  expect(gauge2).toMatchObject({ value: 50, label: 'b', color: 'rgb(127, 128, 0)' });
 //  expect(gauge3).toMatchObject({ value: 90, label: 'c', color: 'rgb(25, 230, 0)' });
