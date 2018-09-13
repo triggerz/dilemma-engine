@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import md from 'marked';
-import Gauge from 'react-svg-gauge';
 import math from 'mathjs';
 import * as R from 'ramda';
+import ScoreGauge from './ScoreGauge';
 import normalizeIfYoutubeLink from './youtube';
 import localStorage from './localStorage';
 
@@ -156,22 +156,7 @@ class Scene extends Component {
     const sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
       const value = this.props.variables[varName];
-      return (
-        <div className={"gauge-container " + varName} key={varName}>
-          <Gauge
-            key={varName}
-            value={value}
-            max={this.state.scene.maxValue}
-            width={90}
-            height={64}
-            label={varName}
-            minMaxLabelStyle={{display: 'none'}}
-            topLabelStyle={{display: 'none'}}
-            valueLabelStyle={{color: '#707070', fontSize: '22px'}}
-          />
-        <span>{varName}</span>
-        </div>
-      );
+      return <ScoreGauge varName={varName} value={value} maxValue={this.state.scene.maxValue} />;
     });
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;
 
