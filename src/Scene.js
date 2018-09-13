@@ -51,18 +51,25 @@ class Scene extends Component {
 
       varsToProcess.forEach(v => {
         let expression = choice.variables[v];
-        if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
-          expression = `${v} + ${expression}`;
+
+        if (this.props.variables[v].export === 'per-page') {
+          const value = Number(expression);
+          this.props.variables[v].scores.push(value);
+
+        } else {
+          if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
+            expression = `${v} + ${expression}`;
+          }
+
+          // Map names with dashes to the equivalent with underscores.
+          const normalizeName = name => name.replace('-', '_');
+
+          const names = R.keys(this.props.variables);
+          const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
+          const normalizedVariables = R.map(R.prop('score'), mapKeys(normalizeName, this.props.variables));
+
+          this.props.variables[v].score = math.eval(normalizedExpression, normalizedVariables);
         }
-
-        // Map names with dashes to the equivalent with underscores.
-        const normalizeName = name => name.replace('-', '_');
-
-        const names = R.keys(this.props.variables);
-        const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
-        const normalizedVariables = mapKeys(normalizeName, this.props.variables);
-
-        this.props.variables[v] = math.eval(normalizedExpression, normalizedVariables);
       });
     }
   }
@@ -146,14 +153,12 @@ class Scene extends Component {
      </div>
     );
 
-    const varNames = this.props.visible
-      ? R.filter(v => (this.props.visible[v] && this.props.visible[v].toLowerCase() === 'true'), R.keys(this.props.variables))
-      : R.keys(this.props.variables);
+    const varNames = R.filter(v => this.props.variables[v].visible, R.keys(this.props.variables));
 
     const totalVarNameIndex = R.indexOf('total', varNames);
     const sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
-      const value = this.props.variables[varName];
+      const value = this.props.variables[varName].score;
       return <ScoreGauge key={varName} varName={varName} value={value} maxValue={this.state.scene.maxValue} />;
     });
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;

@@ -35,7 +35,7 @@ class App extends Component {
     }.bind(this), this.state.variables)
     : this.state.variables;
 
-    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables);
+    const normalizedReturnVariables = R.map(value => value.score / (this.props.config.maxValue), returnVariables);
     const uuid = this.props.options.uuid;
     const answers = localStorage.getAllAnswersFromLocalStorage(uuid);
     const readOnly = this.props.options.previousAnswers;
@@ -88,7 +88,6 @@ class App extends Component {
           </header>
           <Scene
             scenes={this.props.config.scenes}
-            visible={this.state.visible}
             config={activeSceneConfig}
             variables={variables}
             onNavigate={this.onNavigate.bind(this)}

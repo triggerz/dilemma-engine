@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Gauge from 'react-svg-gauge';
 
 export default function ScoreGauge ({ varName, value, maxValue }) {

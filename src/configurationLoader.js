@@ -65,15 +65,24 @@ async function loadConfig(configUrl, analysis) {
     config = rawConfig.config;
     // const variables = R.map(v => Number(v || 0), rawConfig.variables);
 
-    const variables = R.map((varName) => {
-      const value = Number(rawConfig.variables[varName] || 0);
-      return {
+    const variables = R.mapObjIndexed((rawValue, varName) => {
+      const value = Number(rawValue || 0);
+      const exportSetting = rawConfig.exports[varName] && (rawConfig.exports[varName].toLowerCase() === 'true' || rawConfig.exports[varName]);
+      console.log('EXPORT SETTING FOR ', varName, ': ', exportSetting);
+
+      const o = {
         initialValue: value,
-        score: value, // This is the value that will update during the game.
         visible: rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true',
-        export: rawConfig.exports[varName] && (rawConfig.visible[varName].toLowerCase() === 'true' || rawConfig.visible[varName])
+        export: exportSetting
       };
-    })
+      if (exportSetting === 'per-page') {
+        o.scores = [];
+      } else {
+        o.score = value;
+      }
+
+      return o;
+    }, rawConfig.variables)
 
     config.variables = variables;
     config.scenes = {};
