@@ -69,9 +69,7 @@ class Scene extends Component {
 
   onChoose() {
     this.updateScores();
-    this.setState({
-      mustChoose: false
-    });
+    this.setState({ mustChoose: false });
     this.navigate();
   }
 
@@ -156,7 +154,7 @@ class Scene extends Component {
     const sortedVarNames = (totalVarNameIndex !== -1) ? R.prepend(varNames[totalVarNameIndex], R.remove(totalVarNameIndex, 1, varNames)) : varNames
     const gauges = sortedVarNames.map(varName => {
       const value = this.props.variables[varName];
-      return <ScoreGauge varName={varName} value={value} maxValue={this.state.scene.maxValue} />;
+      return <ScoreGauge key={varName} varName={varName} value={value} maxValue={this.state.scene.maxValue} />;
     });
     const gaugePanel = gauges.length ? <div className="gauges panel">{gauges}</div> : null;
 

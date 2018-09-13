@@ -10,7 +10,7 @@
  - total: 100
 
 # Exports
- - strategic: true
+ - strategic: per-page
  - accountability: true
  - ambiguity: true
 

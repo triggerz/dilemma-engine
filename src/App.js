@@ -35,7 +35,7 @@ class App extends Component {
     }.bind(this), this.state.variables)
     : this.state.variables;
 
-    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables); // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
+    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables);
     const uuid = this.props.options.uuid;
     const answers = localStorage.getAllAnswersFromLocalStorage(uuid);
     const readOnly = this.props.options.previousAnswers;

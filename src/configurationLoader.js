@@ -63,11 +63,19 @@ async function loadConfig(configUrl, analysis) {
     }
 
     config = rawConfig.config;
-    const variables = R.map(v => Number(v || 0), rawConfig.variables);
+    // const variables = R.map(v => Number(v || 0), rawConfig.variables);
+
+    const variables = R.map((varName) => {
+      const value = Number(rawConfig.variables[varName] || 0);
+      return {
+        initialValue: value,
+        score: value, // This is the value that will update during the game.
+        visible: rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true',
+        export: rawConfig.exports[varName] && (rawConfig.visible[varName].toLowerCase() === 'true' || rawConfig.visible[varName])
+      };
+    })
 
     config.variables = variables;
-    config.exports = rawConfig.exports;
-    config.visible = rawConfig.visible;
     config.scenes = {};
 
     analysis.info.push({ message: `Variables: ${R.keys(variables).join(', ')}` });
