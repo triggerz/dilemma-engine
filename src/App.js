@@ -30,21 +30,13 @@ class App extends Component {
     console.log(`## Dilemma engine: onCompleted`);
     window.onbeforeunload = null;
 
-    // const returnVariables = this.state.exports ? R.pickBy(function (value, key) {
-    //   return R.contains(key, R.keys(this.state.exports));
-    // }.bind(this), this.state.variables)
-    // : this.state.variables;
-    // const normalizedReturnVariables = R.map(value => value.score / (this.props.config.maxValue), returnVariables);
-
     const normalize = v => v / this.props.config.maxValue;
 
     const pairs = R.toPairs(this.state.variables);
-    console.log('Pairs: ', pairs);
     const normalizedReturnVariables = R.reduce((acc, elem) => {
       const [key, value] = elem;
-      console.log('Key, value: ', key, ', ', value);
       const scores = value.scores || [value.score];
-      return [...acc, ...R.map(v => ({ [key]: normalize(v) }), scores)];
+      return [...acc, ...R.map(v => ([key, normalize(v)]), scores)];
     }, [], pairs);
 
     const uuid = this.props.options.uuid;
