@@ -66,7 +66,7 @@ describe('completed', () => {
       removeItem: () => { store = {} }
     };
     const initialScene = { config: { title: 'initial scene' } };
-    const variables = { a: 17 };
+    const variables = { a: { initialValue: 17, visible: true, export: true, score: 17 } };
 
     const config = {
       initialScene: 'initialScene',
@@ -83,7 +83,7 @@ describe('completed', () => {
     scene.onCompleted();
 
     expect(spy.args).toHaveLength(1);
-    expect(JSON.parse(spy.args[0][0])).toEqual({answers: {}, message: 'dilemma-submit', variables: { a: 17/100 }, uuid: '42'});
+    expect(JSON.parse(spy.args[0][0])).toEqual({answers: {}, message: 'dilemma-submit', variables: [['a', 17/100]], uuid: '42'});
   });
 
   it('sends a POST request if there is a response url defined', () => {
@@ -96,7 +96,7 @@ describe('completed', () => {
     global.fetch.reset();
 
     const initialScene = { config: { title: 'initial scene' } };
-    const variables = {a: 17};
+    const variables = { a: { initialValue: 17, visible: true, export: true, score: 17 } };
 
     const config = {
       initialScene: 'initialScene',
@@ -113,6 +113,6 @@ describe('completed', () => {
     expect(global.fetch.args).toHaveLength(1);
     expect(global.fetch.args[0][0]).toEqual('some-server');
     expect(global.fetch.args[0][1].body.get('uuid')).toBe('42');
-    expect(global.fetch.args[0][1].body.get('variables')).toBe(`{"a":${17/200}}`);
+    expect(global.fetch.args[0][1].body.get('variables')).toBe(`[["a",${17/200}]]`);
   })
 });
