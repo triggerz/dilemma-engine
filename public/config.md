@@ -4,7 +4,7 @@
  - Max Value: 200
 
 # Variables
- - strategic: 100
+ - strategic: 0
  - accountability: 100
  - ambiguity: 100
  - total: 100
