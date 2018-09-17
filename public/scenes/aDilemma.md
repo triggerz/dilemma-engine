@@ -24,10 +24,10 @@ It's good that you're mindful of your Danish team members' emotions. However, it
 You experienced a positive effect in output (+2) but it costed some in Lilly's engagement (-1) as you spent some time convincing Lilly to accept (-1 on strategic)
 
 # Variables
- - strategic: -1
+ - strategic: 14
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (0))
+ - total: round(((accountability * ambiguity) / 100))
 
 
 # Choice
@@ -41,10 +41,10 @@ It's a good reflection that it might have a negative infuence on the team if you
 You experienced a positive effect in output (+2) but it costed some in Jonas's engagement (-1) as you spent some time convincing Jonas to accept (-1 on strategic)
 
 # Variables
- - strategic: -1
+ - strategic: 85
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (0))
+ - total: round(((accountability * ambiguity) / 100))
 
 
 # Choice
@@ -58,7 +58,7 @@ This is a great choice which signals that you are committed to creating a truly 
 You experienced a negative effect in output (-4). No effect on neither engagement nor resource spend.
 
 # Variables
- - strategic: +0
+ - strategic: 55
  - accountability: +0
  - ambiguity: -4
- - total: round(((accountability * ambiguity) / 100) - (0))
+ - total: round(((accountability * ambiguity) / 100))

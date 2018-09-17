@@ -27,10 +27,10 @@ This is a dilemma of balancing how you develop your team members, provide sincer
 You experienced a positive effect in output (+2) but it costed some in Lilly's engagement (-1) as you spent some time convincing Lilly to accept (-1 on strategic)
 
 # Variables
- - strategic: -1
+ - strategic: 78
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (0))
+ - total: round(((accountability * ambiguity) / 100))
 
 
 # Choice
@@ -47,10 +47,10 @@ By developing her leadership skills you will have to spend additional resources.
 You experienced a positive effect in output (+2) but it costed some in Jonas's engagement (-1) as you spent some time convincing Jonas to accept (-1 on strategic)  
 
 # Variables
- - strategic: -1
+ - strategic: 43
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (0))
+ - total: round(((accountability * ambiguity) / 100))
 
 
 # Choice
@@ -66,7 +66,7 @@ This is a dilemma of balancing how you develop your team members, provide sincer
 You experienced a negative effect in output (-4). No effect on neither engagement nor resource spend.
 
 # Variables
- - strategic: +0
+ - strategic: 54
  - accountability: +0
  - ambiguity: -4
- - total: round(((accountability * ambiguity) / 100) - (0))
+ - total: round(((accountability * ambiguity) / 100))
