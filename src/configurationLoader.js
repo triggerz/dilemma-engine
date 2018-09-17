@@ -29,7 +29,6 @@ async function fetchMarkdownConfigFromFirstOf(urlList) {
 }
 
 export async function loadScene(configUrl, sceneId) {
-
   const rawScene = await fetchMarkdownConfigFromFirstOf([
     `${configUrl}scenes/${sceneId}.md`,
     `${configUrl}scenes/${sceneId}.md.txt`,
@@ -79,6 +78,7 @@ async function loadConfig(configUrl, analysis) {
         export: exportSetting
       };
       if (exportSetting === 'per-page') {
+        if (visible) { analysis.errors.push(new Error(`Variable '${varName}' is set to export per-page and to visible.`)); }
         o.scores = [];
       } else {
         o.score = value;
@@ -102,11 +102,22 @@ export async function loadScenes(configUrl) {
   const analysis = {errors: [], warnings: [], info: []};
   const config = await loadConfig(configUrl, analysis);
 
+  const knownVaribleNames = R.keys(config.variables);
+
   try {
     let unprocessedSceneIds = [config.initialScene];
     while(unprocessedSceneIds.length > 0) {
       const sceneId = unprocessedSceneIds[0];
-      const { scene, subsequentSceneIds } = await loadScene(configUrl, sceneId);
+      const { scene, subsequentSceneIds } = await loadScene(configUrl, sceneId, analysis);
+
+      R.forEach((choice) => {
+        R.forEach((variable) => {
+          if (!R.contains(variable, knownVaribleNames)) {
+            analysis.errors.push(new Error(`Scene ${sceneId} refers to an unknown variable '${variable}'.`));
+          }
+        }, R.keys(choice.variables));
+      }, scene.choices);
+
       config.scenes[sceneId] = Object.assign({}, scene, {sceneId});
 
       unprocessedSceneIds = unprocessedSceneIds
