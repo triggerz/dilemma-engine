@@ -35,7 +35,7 @@ class App extends Component {
     const pairs = R.toPairs(this.state.variables);
     const normalizedReturnVariables = R.reduce((acc, elem) => {
       const [key, value] = elem;
-      const scores = value.scores || [value.score];
+      const scores = value.export ? (value.scores || [value.score]) : [];
       return [...acc, ...R.map(v => ([key, normalize(v)]), scores)];
     }, [], pairs);
 

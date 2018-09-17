@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import App from './App';
@@ -66,7 +65,11 @@ describe('completed', () => {
       removeItem: () => { store = {} }
     };
     const initialScene = { config: { title: 'initial scene' } };
-    const variables = { a: { initialValue: 17, visible: true, export: true, score: 17 } };
+    const variables = {
+      a: { initialValue: 15, visible: true, export: true, score: 17 },
+      b: { initialValue: 0, visible: false, export: 'per-page', scores: [10, 20] },
+      c: { initialValue: 15, visible: true, export: false, score: 171 },
+    };
 
     const config = {
       initialScene: 'initialScene',
@@ -83,7 +86,7 @@ describe('completed', () => {
     scene.onCompleted();
 
     expect(spy.args).toHaveLength(1);
-    expect(JSON.parse(spy.args[0][0])).toEqual({answers: {}, message: 'dilemma-submit', variables: [['a', 17/100]], uuid: '42'});
+    expect(JSON.parse(spy.args[0][0])).toEqual({answers: {}, message: 'dilemma-submit', variables: [['a', 17/100], ['b', 10/100], ['b', 20/100]], uuid: '42'});
   });
 
   it('sends a POST request if there is a response url defined', () => {
@@ -96,7 +99,7 @@ describe('completed', () => {
     global.fetch.reset();
 
     const initialScene = { config: { title: 'initial scene' } };
-    const variables = { a: { initialValue: 17, visible: true, export: true, score: 17 } };
+    const variables = { a: { initialValue: 15, visible: true, export: true, score: 17 } };
 
     const config = {
       initialScene: 'initialScene',

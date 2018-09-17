@@ -202,3 +202,69 @@ describe('noFeedback', () => {
     expect(nextSceneId).toEqual('first');
   });
 });
+
+describe('per-page scores', () => {
+  let wrapper, variables, nextSceneId, sceneConfig;
+  const onCompleted = sinon.spy();
+  beforeEach(() => {
+    sceneConfig = {
+      config: {
+        title: 'Some Scene',
+        next: 'first'
+      },
+      sceneId: '',
+      description: 'This scene is for testing',
+      choices: [
+        {
+          choice: 'first',
+          feedback: 'Good job',
+          outcome: 'Everybody is happy',
+          variables: {
+            a: '79',
+          }
+        }
+      ]
+    };
+    variables = {
+      a: { initialValue: 0, scores: [10, 20], export: 'per-page', visible: false },
+    };
+    const options = {
+      uuid: 'Some uuid'
+    };
+    const sceneArray = [
+      {
+        sceneId: 'scene #1',
+        hasQuestion: true
+      },
+      {
+        sceneId: 'scene #2',
+        hasQuestion: false
+      }
+    ];
+    nextSceneId = 'Not updated yet';
+    const activeSceneId = sceneArray[0].sceneId;
+    wrapper = shallow(
+      <Scene config={sceneConfig}
+        variables={variables}
+        onNavigate={(sceneId => nextSceneId = sceneId)}
+        options={options}
+        sceneArray={sceneArray}
+        onCompleted={onCompleted}
+        activeSceneId={activeSceneId}
+      />);
+  });
+
+  it('should update the scores array for per-page exports', () => {
+    wrapper.find('input#choice-0').simulate('change', { target: { value: '0' } });
+    wrapper.find('button').simulate('click');
+    expect(variables).toEqual({
+      a: { initialValue: 0, scores: [10, 20, 79], export: 'per-page', visible: false },
+    });
+
+    const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
+    expect(feedback).toEqual('<p>Good job</p>');
+    expect(nextSceneId).toEqual('first');
+  });
+
+
+});

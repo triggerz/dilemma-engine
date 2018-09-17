@@ -61,5 +61,32 @@ describe('loadScenes', () => {
 
     const sceneIds = Object.keys(config.scenes);
     expect(sceneIds).toEqual(['intro', 'brad']);
+
+    expect(config.variables).toEqual({
+      time: {
+        initialValue: 100,
+        visible: true,
+        export: true,
+        score: 100
+      },
+      engagement: {
+        initialValue: 150,
+        visible: false,
+        export: false,
+        score: 150
+      },
+      performance: {
+        initialValue: 0,
+        visible: false,
+        export: 'per-page',
+        scores: []
+      },
+      totalScore: {
+        initialValue: 0,
+        visible: false,
+        export: false,
+        score: 0
+      }
+    });
   });
 });

@@ -69,8 +69,16 @@ async function loadConfig(configUrl, analysis) {
 
     const variables = R.mapObjIndexed((rawValue, varName) => {
       const value = Number(rawValue || 0);
-      const visible = rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true';
-      const exportSetting = rawConfig.exports[varName] && (rawConfig.exports[varName].toLowerCase() === 'true' || rawConfig.exports[varName]);
+      const visible = !!(rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true');
+
+      let exportSetting = false;
+      if (rawConfig.exports[varName]) {
+        if (rawConfig.exports[varName] === 'per-page') {
+          exportSetting = 'per-page'
+        } else {
+          exportSetting = rawConfig.exports[varName].toLowerCase() === 'true';
+        }
+      }
 
       const o = {
         initialValue: value,
