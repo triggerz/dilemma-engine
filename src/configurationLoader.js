@@ -62,17 +62,20 @@ async function loadConfig(configUrl, analysis) {
       throw new Error('Configuration file must have exactly one #Config section');
     }
 
+    // Set these in case they're not present in the configuration at all.
+    rawConfig.exports = rawConfig.exports || {};
+    rawConfig.visible = rawConfig.visible || {};
+
     config = rawConfig.config;
-    // const variables = R.map(v => Number(v || 0), rawConfig.variables);
 
     const variables = R.mapObjIndexed((rawValue, varName) => {
       const value = Number(rawValue || 0);
+      const visible = rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true';
       const exportSetting = rawConfig.exports[varName] && (rawConfig.exports[varName].toLowerCase() === 'true' || rawConfig.exports[varName]);
-      console.log('EXPORT SETTING FOR ', varName, ': ', exportSetting);
 
       const o = {
         initialValue: value,
-        visible: rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true',
+        visible,
         export: exportSetting
       };
       if (exportSetting === 'per-page') {
