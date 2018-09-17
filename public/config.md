@@ -4,18 +4,18 @@
  - Max Value: 200
 
 # Variables
- - strategic: 100
+ - strategic: 0
  - accountability: 100
  - ambiguity: 100
  - total: 100
 
 # Exports
- - strategic: true
+ - strategic: per-page
  - accountability: true
  - ambiguity: true
 
 # Visible
 - total: true
-- strategic: true
+- strategic: false
 - accountability: true
 - ambiguity: true

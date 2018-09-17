@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import Scene from './Scene';
-import Gauge from 'react-svg-gauge';
+import ScoreGauge from './ScoreGauge';
 
 describe(<Scene />, () => {
   let wrapper;
@@ -10,9 +10,10 @@ describe(<Scene />, () => {
     const sceneConfig = {
       config: {
         title: 'Some scene',
-        next: 'first'
+        next: 'first',
       },
       description: 'This scene is for testing',
+      maxValue: 100,
       choices: [
         {
           choice: 'first',
@@ -29,9 +30,9 @@ describe(<Scene />, () => {
     };
     const activeSceneId = 'Some scene';
     const variables = {
-      'a': 10,
-      'b': 50,
-      'c': 90
+      'a-x': { initialValue: 10, score: 10, export: true, visible: true },
+      'b': { initialValue: 50, score: 50, export: true, visible: true },
+      'c': { initialValue: 90, score: 90, export: true, visible: true }
     };
 
     let nextSceneId = 'Not updated yet';
@@ -39,13 +40,13 @@ describe(<Scene />, () => {
   });
 
   it('renders the initial scene with the proper variables', () => {
-    expect(wrapper.find(Gauge)).toHaveLength(3);
-    const gauge1 = wrapper.find(Gauge).at(0).props();
-    const gauge2 = wrapper.find(Gauge).at(1).props();
-    const gauge3 = wrapper.find(Gauge).at(2).props();
-//  expect(gauge1).toMatchObject({ value: 10, label: 'a', color: 'rgb(229, 26, 0)' });
-//  expect(gauge2).toMatchObject({ value: 50, label: 'b', color: 'rgb(127, 128, 0)' });
-//  expect(gauge3).toMatchObject({ value: 90, label: 'c', color: 'rgb(25, 230, 0)' });
+    expect(wrapper.find(ScoreGauge)).toHaveLength(3);
+    const gauge1 = wrapper.find(ScoreGauge).at(0).props();
+    expect(gauge1).toMatchObject({ varName: 'a-x', value: 10, maxValue: 100 });
+    const gauge2 = wrapper.find(ScoreGauge).at(1).props();
+    expect(gauge2).toMatchObject({ varName: 'b', value: 50, maxValue: 100 });
+    const gauge3 = wrapper.find(ScoreGauge).at(2).props();
+    expect(gauge3).toMatchObject({ varName: 'c', value: 90, maxValue: 100 });
   });
 
   it('should save selected choices to local storage', () => {
@@ -93,9 +94,9 @@ describe('onChoose', () => {
       ]
     };
     variables = {
-      'a-x': 10,
-      'b': 50,
-      'c': 90
+      'a-x': { initialValue: 10, score: 10, export: true, visible: true },
+      'b': { initialValue: 50, score: 50, export: true, visible: true },
+      'c': { initialValue: 90, score: 90, export: true, visible: true }
     };
     const options = {
       uuid: 'Some uuid'
@@ -126,7 +127,11 @@ describe('onChoose', () => {
   it('should adjust variables according to rules when choosing', () => {
     wrapper.find('input#choice-0').simulate('change', {target: { value: '0' } });
     wrapper.find('button').simulate('click');
-    expect(variables).toEqual({ 'a-x': 20, b: 40, c: 114 });
+    expect(variables).toEqual({
+      'a-x': { initialValue: 10, score: 20, export: true, visible: true },
+      'b': { initialValue: 50, score: 40, export: true, visible: true },
+      'c': { initialValue: 90, score: 114, export: true, visible: true }
+    });
 
     const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
     expect(feedback).toEqual('<p>Good job</p>');
@@ -155,9 +160,9 @@ describe('noFeedback', () => {
       ]
     };
     const variables = {
-      'a': 10,
-      'b': 50,
-      'c': 90
+      'a': { initialValue: 10, score: 10, export: true, visible: true },
+      'b': { initialValue: 50, score: 50, export: true, visible: true },
+      'c': { initialValue: 90, score: 90, export: true, visible: true }
     };
     const options = {
       uuid: 'Some uuid'
@@ -189,7 +194,77 @@ describe('noFeedback', () => {
     expect(button.text()).toEqual('Next');
 
     button.simulate('click');
-    expect(variables).toEqual({ a: 20, b: 40, c: 114 });
+    expect(variables).toEqual({
+      'a': { initialValue: 10, score: 20, export: true, visible: true },
+      'b': { initialValue: 50, score: 40, export: true, visible: true },
+      'c': { initialValue: 90, score: 114, export: true, visible: true }
+    });
     expect(nextSceneId).toEqual('first');
   });
+});
+
+describe('per-page scores', () => {
+  let wrapper, variables, nextSceneId, sceneConfig;
+  const onCompleted = sinon.spy();
+  beforeEach(() => {
+    sceneConfig = {
+      config: {
+        title: 'Some Scene',
+        next: 'first'
+      },
+      sceneId: '',
+      description: 'This scene is for testing',
+      choices: [
+        {
+          choice: 'first',
+          feedback: 'Good job',
+          outcome: 'Everybody is happy',
+          variables: {
+            a: '79',
+          }
+        }
+      ]
+    };
+    variables = {
+      a: { initialValue: 0, scores: [10, 20], export: 'per-page', visible: false },
+    };
+    const options = {
+      uuid: 'Some uuid'
+    };
+    const sceneArray = [
+      {
+        sceneId: 'scene #1',
+        hasQuestion: true
+      },
+      {
+        sceneId: 'scene #2',
+        hasQuestion: false
+      }
+    ];
+    nextSceneId = 'Not updated yet';
+    const activeSceneId = sceneArray[0].sceneId;
+    wrapper = shallow(
+      <Scene config={sceneConfig}
+        variables={variables}
+        onNavigate={(sceneId => nextSceneId = sceneId)}
+        options={options}
+        sceneArray={sceneArray}
+        onCompleted={onCompleted}
+        activeSceneId={activeSceneId}
+      />);
+  });
+
+  it('should update the scores array for per-page exports', () => {
+    wrapper.find('input#choice-0').simulate('change', { target: { value: '0' } });
+    wrapper.find('button').simulate('click');
+    expect(variables).toEqual({
+      a: { initialValue: 0, scores: [10, 20, 79], export: 'per-page', visible: false },
+    });
+
+    const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
+    expect(feedback).toEqual('<p>Good job</p>');
+    expect(nextSceneId).toEqual('first');
+  });
+
+
 });

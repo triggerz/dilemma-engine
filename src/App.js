@@ -30,12 +30,15 @@ class App extends Component {
     console.log(`## Dilemma engine: onCompleted`);
     window.onbeforeunload = null;
 
-    const returnVariables = this.state.exports ? R.pickBy(function (value, key) {
-      return R.contains(key, R.keys(this.state.exports));
-    }.bind(this), this.state.variables)
-    : this.state.variables;
+    const normalize = v => v / this.props.config.maxValue;
 
-    const normalizedReturnVariables = R.map(value => value / (this.props.config.maxValue), returnVariables); // 200 is also referenced as the max value in the gauge component. Should be consolidated at some point
+    const pairs = R.toPairs(this.state.variables);
+    const normalizedReturnVariables = R.reduce((acc, elem) => {
+      const [key, value] = elem;
+      const scores = value.export ? (value.scores || [value.score]) : [];
+      return [...acc, ...R.map(v => ([key, normalize(v)]), scores)];
+    }, [], pairs);
+
     const uuid = this.props.options.uuid;
     const answers = localStorage.getAllAnswersFromLocalStorage(uuid);
     const readOnly = this.props.options.previousAnswers;
@@ -88,7 +91,6 @@ class App extends Component {
           </header>
           <Scene
             scenes={this.props.config.scenes}
-            visible={this.state.visible}
             config={activeSceneConfig}
             variables={variables}
             onNavigate={this.onNavigate.bind(this)}

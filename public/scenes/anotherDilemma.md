@@ -26,10 +26,10 @@ This is a dilemma of balancing your own authenticity as a manager with your team
 You experienced a positive effect in output (+2) but it costed some in Lilly's engagement (-1) as you spent some time convincing Lilly to accept (-1 on strategic)
 
 # Variables
- - strategic: -1
+ - strategic: 34
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
+ - total: round(((accountability * ambiguity) / 100))
 
 
 # Choice
@@ -43,10 +43,10 @@ It's great that you address your different working style preferences. Figuring o
 You experienced a positive effect in output (+2) but it costed some in Jonas's engagement (-1) as you spent some time convincing Jonas to accept (-1 on strategic)
 
 # Variables
- - strategic: -1
+ - strategic: 12
  - accountability: -1
  - ambiguity: +2
- - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
+ - total: round(((accountability * ambiguity) / 100))
 
 
 # Choice
@@ -60,7 +60,7 @@ After listening to Hanne, I acknowledge that it must have been a frustrating exp
 You experienced a negative effect in output (-4). No effect on neither engagement nor resource spend.
 
 # Variables
- - strategic: +0
+ - strategic: 13
  - accountability: +0
  - ambiguity: -4
- - total: round(((accountability * ambiguity) / 100) - (100 - strategic))
+ - total: round(((accountability * ambiguity) / 100))

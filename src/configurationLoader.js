@@ -29,7 +29,6 @@ async function fetchMarkdownConfigFromFirstOf(urlList) {
 }
 
 export async function loadScene(configUrl, sceneId) {
-
   const rawScene = await fetchMarkdownConfigFromFirstOf([
     `${configUrl}scenes/${sceneId}.md`,
     `${configUrl}scenes/${sceneId}.md.txt`,
@@ -62,12 +61,41 @@ async function loadConfig(configUrl, analysis) {
       throw new Error('Configuration file must have exactly one #Config section');
     }
 
+    // Set these in case they're not present in the configuration at all.
+    rawConfig.exports = rawConfig.exports || {};
+    rawConfig.visible = rawConfig.visible || {};
+
     config = rawConfig.config;
-    const variables = R.map(v => Number(v || 0), rawConfig.variables);
+
+    const variables = R.mapObjIndexed((rawValue, varName) => {
+      const value = Number(rawValue || 0);
+      const visible = !!(rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true');
+
+      let exportSetting = false;
+      if (rawConfig.exports[varName]) {
+        if (rawConfig.exports[varName] === 'per-page') {
+          exportSetting = 'per-page'
+        } else {
+          exportSetting = rawConfig.exports[varName].toLowerCase() === 'true';
+        }
+      }
+
+      const o = {
+        initialValue: value,
+        visible,
+        export: exportSetting
+      };
+      if (exportSetting === 'per-page') {
+        if (visible) { analysis.errors.push(new Error(`Variable '${varName}' is set to export per-page and to visible.`)); }
+        o.scores = [];
+      } else {
+        o.score = value;
+      }
+
+      return o;
+    }, rawConfig.variables)
 
     config.variables = variables;
-    config.exports = rawConfig.exports;
-    config.visible = rawConfig.visible;
     config.scenes = {};
 
     analysis.info.push({ message: `Variables: ${R.keys(variables).join(', ')}` });
@@ -82,11 +110,22 @@ export async function loadScenes(configUrl) {
   const analysis = {errors: [], warnings: [], info: []};
   const config = await loadConfig(configUrl, analysis);
 
+  const knownVaribleNames = R.keys(config.variables);
+
   try {
     let unprocessedSceneIds = [config.initialScene];
     while(unprocessedSceneIds.length > 0) {
       const sceneId = unprocessedSceneIds[0];
-      const { scene, subsequentSceneIds } = await loadScene(configUrl, sceneId);
+      const { scene, subsequentSceneIds } = await loadScene(configUrl, sceneId, analysis);
+
+      R.forEach((choice) => {
+        R.forEach((variable) => {
+          if (!R.contains(variable, knownVaribleNames)) {
+            analysis.errors.push(new Error(`Scene ${sceneId} refers to an unknown variable '${variable}'.`));
+          }
+        }, R.keys(choice.variables));
+      }, scene.choices);
+
       config.scenes[sceneId] = Object.assign({}, scene, {sceneId});
 
       unprocessedSceneIds = unprocessedSceneIds

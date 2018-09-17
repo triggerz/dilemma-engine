@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
-import sinon from 'sinon';
 import Progress from './Progress';
 
 describe('render', () => {
