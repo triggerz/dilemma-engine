@@ -185,7 +185,7 @@ class Scene extends Component {
     let navigationButton;
     if (this.state.mustChoose && hasFeedback) {
       navigationButton = (
-        <button className="next-button" disabled={!this.state.selectedChoice} onClick={this.onChoose.bind(this)}>Choose</button>
+        <button className="next-button" disabled={!this.state.selectedChoice} onClick={this.onChoose.bind(this)}>Next</button>
       );
     } else {
       if (this.state.scene.config.next) {
@@ -195,7 +195,7 @@ class Scene extends Component {
         );
       } else {
         navigationButton = (
-          <button className="next-button" disabled={this.state.clickedComplete} onClick={this.navigate.bind(this)}>Complete</button>
+          <button className="next-button" disabled={this.state.clickedComplete} onClick={this.navigate.bind(this)}>Submit</button>
         );
       }
     }
