@@ -14,12 +14,26 @@ class App extends Component {
       exports: props.config.exports,
       visible: props.config.visible,
     };
+
+    this.forceComplete = (e) => {
+      if (e.key === 'Enter' && e.ctrlKey && e.shiftKey) {
+        console.log('Force completing..');
+        e.preventDefault();
+        this.onCompleted();
+      }
+    }
   }
 
   componentWillMount() {
     if (window.location.hostname !== 'localhost') {
       window.onbeforeunload = () => true; // see: https://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
     }
+
+    document.addEventListener('keypress', this.forceComplete);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.forceComplete);
   }
 
   onNavigate(sceneId) {
