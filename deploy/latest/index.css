@@ -47,9 +47,9 @@ div.game {
   position: relative;
 }
 
-.next-button {
+.next-button,
+.back-button {
   position: absolute;
-  right: 16px;
   bottom: 16px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
   border-radius: 3px;
@@ -61,12 +61,21 @@ div.game {
   transition: 200ms;
 }
 
+.next-button {
+  right: 16px;
+}
+
+.back-button {
+  left: 16px;
+}
+
 .next-button:disabled {
   background-color: rgba(0, 0, 0, 0.1);
   color: rgba(0, 0, 0, 0.1);
 }
 
-.next-button:hover {
+.next-button:hover,
+.back-button:hover {
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
 }
 
@@ -134,7 +143,8 @@ header span.progress {
   font-size: 14px;
 }
 
-.sidebar {
+.sidebar,
+.game .description {
   padding-bottom: 53px;
 }
 

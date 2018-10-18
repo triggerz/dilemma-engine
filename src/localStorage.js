@@ -29,7 +29,6 @@ function getInitialScene (config, uuid) {
   }
 }
 
-
 module.exports = {
   getInitialScene,
   getAllAnswersFromLocalStorage,

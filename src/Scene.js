@@ -94,6 +94,12 @@ class Scene extends Component {
     }
   }
 
+  navigateBack() {
+    const previousSceneId = R.indexOf(this.props.activeSceneId, R.keys(this.props.scenes)) - 1;
+    const previousScene = R.keys(this.props.scenes)[previousSceneId];
+    this.props.onNavigate(previousScene);
+  }
+
   renderFeedback(choiceValue) {
     const choice = this.state.scene.choices[choiceValue];
     const sections = [];
@@ -199,6 +205,8 @@ class Scene extends Component {
         );
       }
     }
+    const showBackButton = (!this.state.mustChoose && this.state.selectedChoice) || !this.props.config.config.next || this.state.clickedComplete;
+    const backButton = <button className="back-button" onClick={this.navigateBack.bind(this)}>Back</button>;
 
     return (
       <div className="game">
@@ -218,6 +226,7 @@ class Scene extends Component {
           </div>}
         </section>
         {navigationButton}
+        {showBackButton && backButton}
       </div>
     );
   }

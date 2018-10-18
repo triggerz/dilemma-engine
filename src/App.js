@@ -95,7 +95,6 @@ class App extends Component {
     const sceneTitle = (feedbackFor ? this.props.config.scenes[feedbackFor] : activeSceneConfig).config.title;
     const variables = this.state.variables;
     const options = this.props.options;
-    const firstScene = R.filter(key => key !== 'intro' && key !== 'outro', R.keys(this.props.config.scenes))[0]; // scene for first question
     return (
       <div className="main-container">
         <div className="main-container-buffer">
@@ -111,7 +110,7 @@ class App extends Component {
             onCompleted={this.onCompleted.bind(this)}
             options={options}
             activeSceneId={activeSceneId}
-            firstScene={firstScene} />
+          />
         </div>
       </div>
     );
