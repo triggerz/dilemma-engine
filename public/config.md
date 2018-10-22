@@ -2,7 +2,8 @@
  - Title: Daily Dilemmas
  - Initial Scene: intro
  - Max Value: 200
-
+ - Show Back Button: false
+ 
 # Variables
  - strategic: 0
  - accountability: 100

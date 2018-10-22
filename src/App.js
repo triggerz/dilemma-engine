@@ -12,7 +12,7 @@ class App extends Component {
       currentSceneIndex: 1,
       variables: props.config.variables,
       exports: props.config.exports,
-      visible: props.config.visible,
+      visible: props.config.visible
     };
 
     this.forceComplete = (e) => {
@@ -95,6 +95,7 @@ class App extends Component {
     const sceneTitle = (feedbackFor ? this.props.config.scenes[feedbackFor] : activeSceneConfig).config.title;
     const variables = this.state.variables;
     const options = this.props.options;
+    const showBackButton = this.props.config.showBackButton === 'true';
     return (
       <div className="main-container">
         <div className="main-container-buffer">
@@ -110,6 +111,7 @@ class App extends Component {
             onCompleted={this.onCompleted.bind(this)}
             options={options}
             activeSceneId={activeSceneId}
+            showBackButton={showBackButton}
           />
         </div>
       </div>

@@ -207,7 +207,6 @@ class Scene extends Component {
     }
     const showBackButton = (!this.state.mustChoose && this.state.selectedChoice) || !this.props.config.config.next || this.state.clickedComplete;
     const backButton = <button className="back-button" onClick={this.navigateBack.bind(this)}>Back</button>;
-
     return (
       <div className="game">
         <section className="description block half-width-block">
@@ -226,7 +225,7 @@ class Scene extends Component {
           </div>}
         </section>
         {navigationButton}
-        {showBackButton && backButton}
+        {this.props.showBackButton && showBackButton && backButton}
       </div>
     );
   }
