@@ -266,6 +266,4 @@ describe('per-page scores', () => {
     expect(feedback.choice.feedback).toEqual('Good job');
     expect(nextSceneId).toEqual('first');
   });
-
-
 });
