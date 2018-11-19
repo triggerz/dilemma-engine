@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import Scene from './Scene';
 import ScoreGauge from './ScoreGauge';
+import Feedback from './Feedback';
 
 describe(<Scene />, () => {
   let wrapper;
@@ -133,8 +134,8 @@ describe('onChoose', () => {
       'c': { initialValue: 90, score: 114, export: true, visible: true }
     });
 
-    const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
-    expect(feedback).toEqual('<p>Good job</p>');
+    const feedback = wrapper.update().find(Feedback).at(0).props();
+    expect(feedback.choice.feedback).toEqual('Good job');
     expect(nextSceneId).toEqual('first');
   });
 });
@@ -261,8 +262,8 @@ describe('per-page scores', () => {
       a: { initialValue: 0, scores: [10, 20, 79], export: 'per-page', visible: false },
     });
 
-    const feedback = wrapper.update().find('div#feedback').at(0).props().dangerouslySetInnerHTML.__html.trim();
-    expect(feedback).toEqual('<p>Good job</p>');
+    const feedback = wrapper.update().find(Feedback).at(0).props();
+    expect(feedback.choice.feedback).toEqual('Good job');
     expect(nextSceneId).toEqual('first');
   });
 
