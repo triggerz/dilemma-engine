@@ -3,8 +3,10 @@ import md from 'marked';
 import math from 'mathjs';
 import * as R from 'ramda';
 import ScoreGauge from './ScoreGauge';
-import normalizeIfYoutubeLink from './youtube';
 import localStorage from './localStorage';
+import VideoPanel from './VideoPanel';
+import ImagePanel from './ImagePanel';
+import Feedback from './Feedback';
 
 // Helper function from the Ramda cookbook:
 //    mapKeys :: (String -> String) -> Object -> Object
@@ -102,61 +104,12 @@ class Scene extends Component {
 
   renderFeedback(choiceValue) {
     const choice = this.state.scene.choices[choiceValue];
-    const sections = [];
-    if (choice) {
-      if (choice.choice) {
-        sections.push({
-          id: 'choice-text',
-          title: 'Your response',
-          innerHtml: md(choice.choice)
-        });
-      }
-
-      if (choice.feedback) {
-        sections.push({
-          id: 'feedback',
-          title: 'Feedback',
-          innerHtml: md(choice.feedback)
-        });
-      }
-
-      if (choice.outcome) {
-        sections.push({
-          id: 'outcome',
-          title: 'Outcome',
-          innerHtml: md(choice.outcome)
-        });
-      }
-
-      return (
-        <div>
-          {sections.map(s => (
-            <div key={s.id}>
-              <h1>{s.title}</h1>
-              <div id={s.id} dangerouslySetInnerHTML={{ __html: s.innerHtml }} />
-            </div>))}
-        </div>
-      );
-    }
+    return choice && <Feedback choice={choice} />;
   }
 
   render () {
     const combinedText = this.state.scene.description;
     const description = md(combinedText);
-    const video = this.state.scene.config.video && normalizeIfYoutubeLink(this.state.scene.config.video);
-    const image = this.state.scene.config.image;
-    const videoPanel = (
-     <div className="card video">
-       <div className="container">
-         <iframe title="embedded video" src={video} frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen />
-       </div>
-     </div>
-    );
-    const imagePanel = (
-     <div className="card image">
-       <img src={image} alt="" />
-     </div>
-    );
 
     const varNames = R.filter(v => this.props.variables[v].visible, R.keys(this.props.variables));
 
@@ -183,7 +136,8 @@ class Scene extends Component {
       choicePanel = choices.length ? <form className="choices-panel">{choices}</form> : null;
     } else {
       if(this.state.selectedChoice) {
-        choicePanel = this.renderFeedback(this.state.selectedChoice);
+        const choice = this.state.scene.choices[this.state.selectedChoice];
+        choicePanel = choice && <Feedback choice={choice} />;
       }
     }
 
@@ -210,8 +164,8 @@ class Scene extends Component {
     return (
       <div className="game">
         <section className="description block half-width-block">
-          {video && videoPanel}
-          {image && imagePanel}
+          {this.state.scene.config.video && <VideoPanel video={this.state.scene.config.video} />}
+          {this.state.scene.config.image && <ImagePanel image={this.state.scene.config.image} />}
           <div className="card">
             <div dangerouslySetInnerHTML={{__html: description}} />
           </div>

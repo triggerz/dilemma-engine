@@ -1,3 +1,5 @@
+import React from 'react';
+
 function getYoutubeId(url) {
   url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
   if (url[2] !== undefined) {
@@ -6,7 +8,7 @@ function getYoutubeId(url) {
   }
 }
 
-export default function normalizeIfYoutubeLink(url) {
+function normalizeIfYoutubeLink(url) {
   const youtubeId = getYoutubeId(url);
   if (youtubeId) {
     return `https://www.youtube.com/embed/${youtubeId}`;
@@ -14,3 +16,11 @@ export default function normalizeIfYoutubeLink(url) {
     return url;
   }
 }
+
+const VideoPanel = ({ video }) => (<div className="card video">
+  <div className="container">
+    <iframe title="embedded video" src={normalizeIfYoutubeLink(video)} frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen />
+  </div>
+</div>);
+
+export default VideoPanel;
