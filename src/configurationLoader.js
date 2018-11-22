@@ -69,14 +69,28 @@ async function loadConfig(configUrl, analysis) {
 
     const variables = R.mapObjIndexed((rawValue, varName) => {
       const value = Number(rawValue || 0);
-      const visible = !!(rawConfig.visible[varName] && rawConfig.visible[varName].toLowerCase() === 'true');
+      let visible = false;
+      if (rawConfig.visible[varName]) {
+        const v = rawConfig.visible[varName].toLowerCase().trim();
+        if (v === 'true') {
+          visible = true;
+        } else if (v !== 'false') {
+          throw new Error(`Unknown visible value for ${varName} set: '${rawConfig.visible[varName]}' -- expected 'true' or 'false'.`);
+        }
+      }
 
       let exportSetting = false;
       if (rawConfig.exports[varName]) {
-        if (rawConfig.exports[varName] === 'per-page') {
+        const e = rawConfig.exports[varName].toLowerCase().trim();
+
+        if (e === 'per-page') {
           exportSetting = 'per-page'
         } else {
-          exportSetting = rawConfig.exports[varName].toLowerCase() === 'true';
+          if (e === 'true') {
+            exportSetting = true;
+          } else if (e !== 'false') {
+            throw new Error(`Unknown exports value for ${varName} set: '${rawConfig.exports[varName]}' -- expected 'true', 'false' or 'per-page'.`);
+          }
         }
       }
 
