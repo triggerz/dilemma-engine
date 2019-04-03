@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import md from 'marked';
-import math from 'mathjs';
 import * as R from 'ramda';
+
 import ScoreGauge from './ScoreGauge';
+import helper from './helper';
 import localStorage from './localStorage';
 import VideoPanel from './VideoPanel';
 import ImagePanel from './ImagePanel';
 import Feedback from './Feedback';
-
-// Helper function from the Ramda cookbook:
-//    mapKeys :: (String -> String) -> Object -> Object
-const mapKeys = R.curry((fn, obj) =>
-  R.fromPairs(R.map(R.adjust(fn, 0), R.toPairs(obj))));
 
 class Scene extends Component {
   constructor (props) {
@@ -47,32 +43,7 @@ class Scene extends Component {
   }
 
   updateScores() {
-    const choice = this.state.scene.choices[this.state.selectedChoice];
-    if (choice.variables) {
-      const varsToProcess = choice.variables && Object.keys(choice.variables);
-
-      varsToProcess.forEach(v => {
-        let expression = choice.variables[v];
-
-        if (this.props.variables[v].export === 'per-page') {
-          const value = Number(expression);
-          this.props.variables[v].scores.push(value);
-        } else {
-          if (expression.match(/^(\+|-)\d*$/)) { // If the expression is simply +3 etc., add it to the previous value.
-            expression = `${v} + ${expression}`;
-          }
-
-          // Map names with dashes to the equivalent with underscores.
-          const normalizeName = name => name.replace('-', '_');
-
-          const names = R.keys(this.props.variables);
-          const normalizedExpression = R.reduce((expr, name) => expr.replace(name, normalizeName(name)), expression.toLowerCase(), names);
-          const normalizedVariables = R.map(R.prop('score'), mapKeys(normalizeName, this.props.variables));
-
-          this.props.variables[v].score = math.eval(normalizedExpression, normalizedVariables);
-        }
-      });
-    }
+    helper.updateScores(this.props.variables, this.state.scene, this.state.selectedChoice);
   }
 
   onChoose() {

@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
-import Scene from './Scene';
+
+import helper from './helper';
 import localStorage from './localStorage';
 import Progress from './Progress';
+import Scene from './Scene';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    const uuid = props.options.uuid;
+    const answers = localStorage.getAllAnswersFromLocalStorage(uuid);
+    const variables = props.config.variables;
+
+    // Note: update variables if there are any answered question in the local storage
+    helper.getOrderedSceneArray(props.config, answers)
+      .filter(scene => scene.hasAnswer)
+      .forEach(scene => helper.updateScores(variables, scene, answers[scene.sceneId]));
+
     this.state = {
-      activeSceneId: localStorage.getInitialScene(props.config, props.options.uuid),
+      activeSceneId: localStorage.getInitialScene(props.config, uuid),
       currentSceneIndex: 1,
-      variables: props.config.variables,
+      variables,
       exports: props.config.exports,
       visible: props.config.visible
     };

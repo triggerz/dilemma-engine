@@ -37,7 +37,7 @@ describe('navigate', () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
-    const initialScene = { config: { title: 'Initial Scene'} };
+    const initialScene = { config: { title: 'Initial Scene', next: 'scene2' } };
     const scene2 = { config: { title: 'Scene #2' } };
     const variables = {};
 
