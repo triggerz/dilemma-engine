@@ -61,6 +61,7 @@ class Scene extends Component {
     const nextSceneId = this.props.config.config.next;
     if (nextSceneId) {
       this.props.onNavigate(nextSceneId);
+      helper.scrollToTop();
     } else {
       this.setState({clickedComplete: true});
       this.props.onCompleted();

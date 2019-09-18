@@ -51,7 +51,59 @@ function updateScores (variables, scene, selectedChoice) {
   }
 }
 
+function scrollSmoothlyTo (options) {
+  const element = options.element || window;
+  const axis = options.axis || 'y';
+  const scrollYAxis = axis === 'y';
+  const scrollTarget = options[axis];
+  const transition = options.transition;
+  const scroll = scrollYAxis ? element[options.element ? 'scrollTop' : 'scrollY'] : element[options.element ? 'scrollLeft' : 'scrollX'];
+  let currentTime = 0;
+
+  // easing equation from https://github.com/danro/easing-js/blob/master/easing.js
+  function easeInOutSine (pos) {
+    return (-0.5 * (Math.cos(Math.PI * pos) - 1));
+  }
+
+  function scrollOn (target) {
+    const xAxisScroll = scrollYAxis ? 0 : target;
+    const yAxisScroll = scrollYAxis ? target : 0;
+    if (options.element) {
+      element.scrollLeft = xAxisScroll;
+      element.scrollTop = yAxisScroll;
+    } else {
+      element.scrollTo(xAxisScroll, yAxisScroll);
+    }
+  }
+
+  // animation loop
+  function tick () {
+    currentTime += 1 / 60;
+
+    const p = currentTime / (transition / 1000);
+    const t = easeInOutSine(p);
+
+    if (p < 1) {
+      window.requestAnimationFrame(tick) ||
+      window.webkitRequestAnimationFrame(tick) ||
+      window.mozRequestAnimationFrame(tick);
+      const scrollSum = scroll + ((scrollTarget - scroll) * t);
+      scrollOn(scrollSum);
+    } else {
+      scrollOn(scrollTarget);
+    }
+  }
+
+  // call it once to g$et started
+  tick();
+}
+
+function scrollToTop () {
+  scrollSmoothlyTo({ y: 0, transition: 400 });
+}
+
 module.exports = {
   getOrderedSceneArray,
+  scrollToTop,
   updateScores
 };
