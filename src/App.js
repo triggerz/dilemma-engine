@@ -12,6 +12,14 @@ class App extends Component {
     const uuid = props.options.uuid;
     const answers = localStorage.getAllAnswersFromLocalStorage(uuid);
     const variables = props.config.variables;
+    
+    // Note: preload and disk cache images
+    R.forEach((s) => {
+      if (s.config.image) {
+        let img = new Image();
+        img.src = s.config.image;
+      }
+    }, Object.values(this.props.config.scenes || {}));
 
     // Note: update variables if there are any answered question in the local storage
     helper.getOrderedSceneArray(props.config, answers)
