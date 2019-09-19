@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700');
+
 body {
-  font-family: 'Roboto Condensed', sans-serif;
-  color: #707070;
-  fill: #707070;
+  font-family: 'Roboto', sans-serif;
+  color: #3e3e3e;
+  fill: #3e3e3e;
   margin: 0;
   background-color: #efefef;
 }
