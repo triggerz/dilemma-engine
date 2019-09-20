@@ -98,12 +98,17 @@ function scrollSmoothlyTo (options) {
   tick();
 }
 
+function scrollToBottom () {
+  scrollSmoothlyTo({ y: document.body.scrollHeight, transition: 400 });
+}
+
 function scrollToTop () {
   scrollSmoothlyTo({ y: 0, transition: 400 });
 }
 
 module.exports = {
   getOrderedSceneArray,
+  scrollToBottom,
   scrollToTop,
   updateScores
 };

@@ -40,6 +40,7 @@ class Scene extends Component {
     this.setState({
       selectedChoice
     });
+    helper.scrollToBottom();
   }
 
   updateScores() {
