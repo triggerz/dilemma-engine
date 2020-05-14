@@ -28,6 +28,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-svg-gauge": "^1.0.10",
+    "semver": "^5.5.0",
     "url-search-params-polyfill": "^3.0.0"
   },
   "scripts": {
