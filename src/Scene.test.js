@@ -5,7 +5,7 @@ import Scene from './Scene';
 import ScoreGauge from './ScoreGauge';
 import Feedback from './Feedback';
 
-describe(<Scene />, () => {
+describe('<Scene />', () => {
   let wrapper;
   beforeEach(() => {
     const sceneConfig = {
@@ -57,6 +57,11 @@ describe(<Scene />, () => {
       getItem: key => store[key],
       removeItem: () => { store = {} }
     };
+    // Note: there's a new way to mock localStorage apparently
+    Storage.prototype.setItem = (key, value) => { store[key] = value + '' };
+    Storage.prototype.getItem = key => store[key];
+    Storage.prototype.removeItem = () => { store = {} };
+    window.scrollTo = () => {};
     wrapper.find('input#choice-0').simulate('change', {target: { value: 0 } });
     expect(store).toEqual({'dilemma[Some uuid]': '{"Some scene":0}'});
   });
