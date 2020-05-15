@@ -58,9 +58,9 @@ describe('<Scene />', () => {
       removeItem: () => { store = {} }
     };
     // Note: there's a new way to mock localStorage apparently
-    Storage.prototype.setItem = (key, value) => { store[key] = value + '' };
-    Storage.prototype.getItem = key => store[key];
-    Storage.prototype.removeItem = () => { store = {} };
+    // Storage.prototype.setItem = (key, value) => { store[key] = value + '' };
+    // Storage.prototype.getItem = key => store[key];
+    // Storage.prototype.removeItem = () => { store = {} };
     window.scrollTo = () => {};
     wrapper.find('input#choice-0').simulate('change', {target: { value: 0 } });
     expect(store).toEqual({'dilemma[Some uuid]': '{"Some scene":0}'});

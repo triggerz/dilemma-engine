@@ -10,8 +10,8 @@ describe('localStorage', function () {
       getItem: key => store[key]
     };
     // Note: there's a new way to mock localStorage apparently
-    Storage.prototype.setItem = (key, value) => { store[key] = value + '' };
-    Storage.prototype.getItem = key => store[key];
+    // Storage.prototype.setItem = (key, value) => { store[key] = value + '' };
+    // Storage.prototype.getItem = key => store[key];
   });
   it('should getAllAnswersFromLocalStorage', () => {
     const answers = localStorage.getAllAnswersFromLocalStorage(this.uuid);
