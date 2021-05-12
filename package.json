@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "marked": "^0.3.19",
-    "mathjs": "^3.17.0",
+    "mathjs": "^7.5.1",
     "ramda": "^0.25.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
